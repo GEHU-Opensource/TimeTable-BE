@@ -1,0 +1,2211 @@
+{
+	"info": {
+		"_postman_id": "a3b6e5db-b19b-4a39-b660-2d1b58756ca8",
+		"name": "TimeTable-GEHU",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32556794"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login API",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"vibhachandola.220121207@gehu.ac.in\",\r\n    \"password\": \"Vibha@VC-26\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/login/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"login",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login API response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"vibhachandola.220121207@gehu.ac.in\",\r\n    \"password\": \"Vibha@VC-26\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/login/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"login",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 18 Feb 2025 12:26:54 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "564"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Login successful\",\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5ODg4ODE0LCJpYXQiOjE3Mzk4ODE2MTQsImp0aSI6ImU0Nzg3YThhYTA0MjQ3YzY5YjUxODg0ZGFkYWI4OWE0IiwidXNlcl9pZCI6MjZ9.qsEZQ-8kez73bC9Rf03Q9ukYFWFgmuviE46znvHLh8o\",\n    \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczOTk2ODAxNCwiaWF0IjoxNzM5ODgxNjE0LCJqdGkiOiI0OTZjYjg4ZTM5Nzc0MWE2OWJmMWM5ZTgzMmM5ZjgwZSIsInVzZXJfaWQiOjI2fQ.HbIVRd7PPXvNsR4PvcgKOHW1fk_dYpFMbqqQVmq6RKU\",\n    \"teacher\": {\n        \"teacher_type\": \"faculty\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Rooms",
+			"item": [
+				{
+					"name": "Get all Rooms",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/getRooms/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"getRooms",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get all Rooms",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/getRooms/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"getRooms",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 26 Jan 2025 16:50:58 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "OPTIONS, GET"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "407"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 13,\n        \"room_code\": \"Lab01\",\n        \"capacity\": 40,\n        \"room_type\": \"Lab\"\n    },\n    {\n        \"id\": 5,\n        \"room_code\": \"LT02\",\n        \"capacity\": 90,\n        \"room_type\": \"Lecture Theatre\"\n    },\n    {\n        \"id\": 4,\n        \"room_code\": \"LT01\",\n        \"capacity\": 80,\n        \"room_type\": \"Lecture Theatre\"\n    },\n    {\n        \"id\": 20,\n        \"room_code\": \"Lab05\",\n        \"capacity\": 100,\n        \"room_type\": \"Lab\"\n    },\n    {\n        \"id\": 10,\n        \"room_code\": \"CR01\",\n        \"capacity\": 100,\n        \"room_type\": \"Class Room\"\n    },\n    {\n        \"id\": 23,\n        \"room_code\": \"CR05\",\n        \"capacity\": 50,\n        \"room_type\": \"Class Room\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Add new Room(s)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"room_code\": \"Lab04\",\r\n    \"capacity\": 100,\r\n    \"room_type\": \"Lab\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/addRoom/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"addRoom",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Add new Room(s)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"room_code\": \"Lab04\",\r\n    \"capacity\": 100,\r\n    \"room_type\": \"Lab\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/addRoom/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"addRoom",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 26 Jan 2025 16:51:25 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "OPTIONS, POST"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "64"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 24,\n        \"room_code\": \"Lab04\",\n        \"capacity\": 100,\n        \"room_type\": \"Lab\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Update a Room",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"capacity\": 120\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/updateRoom/24/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"updateRoom",
+								"24",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update a Room",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"capacity\": 120\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/updateRoom/24/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"updateRoom",
+										"24",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 26 Jan 2025 16:52:22 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "OPTIONS, PUT"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "62"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 24,\n    \"room_code\": \"Lab04\",\n    \"capacity\": 120,\n    \"room_type\": \"Lab\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete a Room",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/deleteRoom/24/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"deleteRoom",
+								"24",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete a Room",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/deleteRoom/24/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"deleteRoom",
+										"24",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 26 Jan 2025 16:52:38 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "OPTIONS, DELETE"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "39"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Room deleted successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Subjects",
+			"item": [
+				{
+					"name": "Get all subjects",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/getAllSubjects/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"getAllSubjects",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get all subjects response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/getAllSubjects/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"getAllSubjects",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 18 Feb 2025 12:28:04 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "718"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 27,\n        \"subject_name\": \"Computer Networks\",\n        \"subject_code\": \"TCS-602\",\n        \"semester\": 6,\n        \"credits\": 3,\n        \"weekly_quota_limit\": 1,\n        \"is_special_subject\": \"No\",\n        \"is_lab\": \"No\",\n        \"department\": \"Computer Science Engineering\",\n        \"course\": \"B.Tech\",\n        \"branch\": \"Core\"\n    },\n    {\n        \"id\": 28,\n        \"subject_name\": \"Network and System Security\",\n        \"subject_code\": \"TCS-603\",\n        \"semester\": 6,\n        \"credits\": 3,\n        \"weekly_quota_limit\": 1,\n        \"is_special_subject\": \"No\",\n        \"is_lab\": \"No\",\n        \"department\": \"Computer Science Engineering\",\n        \"course\": \"B.Tech\",\n        \"branch\": \"Core\"\n    },\n    {\n        \"id\": 26,\n        \"subject_name\": \"Placement Class\",\n        \"subject_code\": \"TCS-601\",\n        \"semester\": 6,\n        \"credits\": 4,\n        \"weekly_quota_limit\": 1,\n        \"is_special_subject\": \"Yes\",\n        \"is_lab\": \"No\",\n        \"department\": \"Computer Science Engineering\",\n        \"course\": \"B.Tech\",\n        \"branch\": \"Core\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Filtered Subjects",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/getFilteredSubjects/filter?department=Computer Science Engineering&course=B.Tech&branch=Core&semester=6",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"getFilteredSubjects",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "department",
+									"value": "Computer Science Engineering"
+								},
+								{
+									"key": "course",
+									"value": "B.Tech"
+								},
+								{
+									"key": "branch",
+									"value": "Core"
+								},
+								{
+									"key": "semester",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Filtered Subjects",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/getFilteredSubjects/filter?department=Computer Science Engineering&course=B.Tech&branch=Core&semester=6",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"getFilteredSubjects",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "department",
+											"value": "Computer Science Engineering"
+										},
+										{
+											"key": "course",
+											"value": "B.Tech"
+										},
+										{
+											"key": "branch",
+											"value": "Core"
+										},
+										{
+											"key": "semester",
+											"value": "6"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 18 Feb 2025 12:34:54 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "952"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 26,\n        \"subject_name\": \"Placement Class\",\n        \"subject_code\": \"TCS-601\",\n        \"semester\": 6,\n        \"credits\": 4,\n        \"weekly_quota_limit\": 1,\n        \"is_special_subject\": \"Yes\",\n        \"is_lab\": \"No\",\n        \"department\": \"Computer Science Engineering\",\n        \"course\": \"B.Tech\",\n        \"branch\": \"Core\"\n    },\n    {\n        \"id\": 28,\n        \"subject_name\": \"Network and System Security\",\n        \"subject_code\": \"TCS-603\",\n        \"semester\": 6,\n        \"credits\": 3,\n        \"weekly_quota_limit\": 3,\n        \"is_special_subject\": \"No\",\n        \"is_lab\": \"No\",\n        \"department\": \"Computer Science Engineering\",\n        \"course\": \"B.Tech\",\n        \"branch\": \"Core\"\n    },\n    {\n        \"id\": 27,\n        \"subject_name\": \"Computer Networks\",\n        \"subject_code\": \"TCS-602\",\n        \"semester\": 6,\n        \"credits\": 3,\n        \"weekly_quota_limit\": 3,\n        \"is_special_subject\": \"No\",\n        \"is_lab\": \"No\",\n        \"department\": \"Computer Science Engineering\",\n        \"course\": \"B.Tech\",\n        \"branch\": \"Core\"\n    },\n    {\n        \"id\": 29,\n        \"subject_name\": \"Compiler Design\",\n        \"subject_code\": \"TCS-604\",\n        \"semester\": 6,\n        \"credits\": 3,\n        \"weekly_quota_limit\": 3,\n        \"is_special_subject\": \"No\",\n        \"is_lab\": \"No\",\n        \"department\": \"Computer Science Engineering\",\n        \"course\": \"B.Tech\",\n        \"branch\": \"Core\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Add new Subject(s)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"subject_name\": \"Compiler Design\",\r\n    \"subject_code\": \"TCS-604\",\r\n    \"semester\": 6,\r\n    \"credits\": 3,\r\n    \"weekly_quota_limit\": 3,\r\n    \"is_special_subject\": \"No\",\r\n    \"is_lab\": \"No\",\r\n    \"department\": \"Computer Science Engineering\",\r\n    \"course\": \"B.Tech\",\r\n    \"branch\": \"Core\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/addSubject/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"addSubject",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Add new Subject(s)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"subject_name\": \"Compiler Design\",\r\n    \"subject_code\": \"TCS-604\",\r\n    \"semester\": 6,\r\n    \"credits\": 3,\r\n    \"weekly_quota_limit\": 3,\r\n    \"is_special_subject\": \"No\",\r\n    \"is_lab\": \"No\",\r\n    \"department\": \"Computer Science Engineering\",\r\n    \"course\": \"B.Tech\",\r\n    \"branch\": \"Core\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/addSubject/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"addSubject",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 18 Feb 2025 12:33:29 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "289"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Subjects added successfully.\",\n    \"subjects\": [\n        {\n            \"id\": 29,\n            \"subject_name\": \"Compiler Design\",\n            \"subject_code\": \"TCS-604\",\n            \"semester\": 6,\n            \"credits\": 3,\n            \"weekly_quota_limit\": 3,\n            \"is_special_subject\": \"No\",\n            \"is_lab\": \"No\",\n            \"department\": \"Computer Science Engineering\",\n            \"course\": \"B.Tech\",\n            \"branch\": \"Core\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Update a Subject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"credits\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/updateSubject/29/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"updateSubject",
+								"29",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update Subject response",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"credits\": 3\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/updateSubject/29/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"updateSubject",
+										"29",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 18 Feb 2025 12:37:55 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "PUT, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "233"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 29,\n    \"subject_name\": \"Compiler Design\",\n    \"subject_code\": \"TCS-604\",\n    \"semester\": 6,\n    \"credits\": 3,\n    \"weekly_quota_limit\": 3,\n    \"is_special_subject\": \"No\",\n    \"is_lab\": \"No\",\n    \"department\": \"Computer Science Engineering\",\n    \"course\": \"B.Tech\",\n    \"branch\": \"Core\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete a Subject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/deleteSubject/24/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"deleteSubject",
+								"24",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete a Subject",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/deleteSubject/24/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"deleteSubject",
+										"24",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 26 Jan 2025 16:55:31 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "OPTIONS, DELETE"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Subject deleted successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Teachers",
+			"item": [
+				{
+					"name": "Get all Teachers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/getTeachers/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"getTeachers",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get all Teachers",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/getTeachers/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"getTeachers",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 18 Feb 2025 12:22:56 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "961"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 56,\n        \"preferred_subjects\": [\n            \"TCS-602\"\n        ],\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Professor\",\n        \"working_days\": \"Monday-Friday\",\n        \"weekly_workload\": 20,\n        \"teacher_code\": \"LS-01\",\n        \"teacher_type\": \"faculty\",\n        \"user\": 23\n    },\n    {\n        \"id\": 57,\n        \"preferred_subjects\": [],\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Assistant Professor\",\n        \"working_days\": \"Monday-Friday\",\n        \"weekly_workload\": 20,\n        \"teacher_code\": \"GB-01\",\n        \"teacher_type\": \"faculty\",\n        \"user\": 24\n    },\n    {\n        \"id\": 58,\n        \"preferred_subjects\": [],\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Professor\",\n        \"working_days\": \"Monday-Friday\",\n        \"weekly_workload\": 20,\n        \"teacher_code\": \"ARS-01\",\n        \"teacher_type\": \"faculty\",\n        \"user\": 25\n    },\n    {\n        \"id\": 59,\n        \"preferred_subjects\": [],\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Professor\",\n        \"working_days\": \"Monday-Friday\",\n        \"weekly_workload\": 20,\n        \"teacher_code\": \"VC-01\",\n        \"teacher_type\": \"faculty\",\n        \"user\": 26\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get specific Teacher's details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5NDY4NTM0LCJpYXQiOjE3Mzk0NjY3MzQsImp0aSI6ImU4ZGE5YzI0YzM2ODQzM2ZhMmRlOGYzNGFlYTVmNDIyIiwidXNlcl9pZCI6OH0.U0Tr9jjos_rciQTeUVGgyvzBS75ro6iwna41OoLiSSg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/getSpecificTeacher/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"getSpecificTeacher",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get specific Teacher's details response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5NDY4NTM0LCJpYXQiOjE3Mzk0NjY3MzQsImp0aSI6ImU4ZGE5YzI0YzM2ODQzM2ZhMmRlOGYzNGFlYTVmNDIyIiwidXNlcl9pZCI6OH0.U0Tr9jjos_rciQTeUVGgyvzBS75ro6iwna41OoLiSSg",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/getSpecificTeacher/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"getSpecificTeacher",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 21 Feb 2025 17:43:25 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "326"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 58,\n    \"name\": \"Atharva Raj Sinha\",\n    \"email\": \"ath@gehu.ac.in\",\n    \"teacher_code\": \"ARS-01\",\n    \"teacher_type\": \"hod\",\n    \"phone\": \"1234567890\",\n    \"department\": \"Computer Science Engineering\",\n    \"designation\": \"Assistant Professor\",\n    \"working_days\": \"Monday-Friday\",\n    \"assigned_subjects\": [\n        \"Placement Class\",\n        \"Network and System Security\",\n        \"Compiler Design\"\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Add a new Teacher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Vinay\",\r\n    \"email\": \"vinay@gehu.ac.in\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/addTeacher/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"addTeacher",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Add a new Teacher response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Vinay\",\r\n    \"email\": \"vinay@gehu.ac.in\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/addTeacher/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"addTeacher",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 18 Feb 2025 12:43:29 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "69"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Teacher added successfully, credentials sent via email.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update a Teacher's details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"0123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/updateTeacher/58/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"updateTeacher",
+								"58",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update Teacher's details response",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"phone\": \"0123456789\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/updateTeacher/58/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"updateTeacher",
+										"58",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 21 Feb 2025 17:44:53 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "OPTIONS, PUT"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "305"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 58,\n    \"name\": \"Atharva Raj Sinha\",\n    \"email\": \"ath@gehu.ac.in\",\n    \"teacher_code\": \"ARS-01\",\n    \"phone\": \"0123456789\",\n    \"department\": \"Computer Science Engineering\",\n    \"designation\": \"Assistant Professor\",\n    \"working_days\": \"Monday-Friday\",\n    \"assigned_subjects\": [\n        \"Placement Class\",\n        \"Network and System Security\",\n        \"Compiler Design\"\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"old_password\": \"VibhaVC18\",\r\n    \"new_password\": \"Vibha@VC-18\",\r\n    \"confirm_password\": \"Vibha@VC-18\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/updatePassword/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"updatePassword",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "update password response",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"old_password\": \"VibhaVC18\",\r\n    \"new_password\": \"Vibha@VC-18\",\r\n    \"confirm_password\": \"Vibha@VC-18\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/updatePassword/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"updatePassword",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 16 Feb 2025 13:41:06 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "PUT, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "44"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Password updated successfully.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete a Teacher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/deleteTeacher/29/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"deleteTeacher",
+								"29",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete a Teacher",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/deleteTeacher/29/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"deleteTeacher",
+										"29",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 26 Jan 2025 16:57:06 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "OPTIONS, DELETE"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "42"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Teacher deleted successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Students",
+			"item": [
+				{
+					"name": "Add Students",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/vibha/Downloads/students_data (2).xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/addStudentAPI/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"addStudentAPI",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Conflict Detection",
+			"item": [
+				{
+					"name": "Detect Conflicts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "csv_files",
+									"type": "file",
+									"src": [
+										"/D:/GEHU-TimeTable/GEHU-TimeTable-BE/mainapp/sample_timetables/conflicting/CSE VI B.csv",
+										"/D:/GEHU-TimeTable/GEHU-TimeTable-BE/mainapp/sample_timetables/conflicting/CSE VI D.csv"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/detectConflicts/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"detectConflicts",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Detect Conflicts response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "csv_files",
+											"type": "file",
+											"src": [
+												"/D:/GEHU-TimeTable/GEHU-TimeTable-BE/mainapp/sample_timetables/conflicting/CSE VI B.csv",
+												"/D:/GEHU-TimeTable/GEHU-TimeTable-BE/mainapp/sample_timetables/conflicting/CSE VI D.csv"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/detectConflicts/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"detectConflicts",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 18 Feb 2025 12:51:17 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "291"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Vary",
+									"value": "origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"conflicts\": [\n        {\n            \"timetable_1\": \"CSE VI B.csv\",\n            \"timetable_2\": \"CSE VI D.csv\",\n            \"conflict_details\": [\n                {\n                    \"type\": \"Teacher Conflict\",\n                    \"teacher\": \"AA\",\n                    \"day\": \"WEDNESDAY\",\n                    \"time_slot\": \"9:55-10:50\"\n                },\n                {\n                    \"type\": \"Teacher Conflict\",\n                    \"teacher\": \"Online\",\n                    \"day\": \"FRIDAY\",\n                    \"time_slot\": \"11:00-11:50\"\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "HOD",
+			"item": [
+				{
+					"name": "Get all pending requests of a particular department",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/getPendingRequests/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"getPendingRequests",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get all pending requests of a particular department response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/getPendingRequests/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"getPendingRequests",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 19 Feb 2025 18:28:05 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "437"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"subjects\": [\n        {\n            \"subject_name\": \"Placement Class\",\n            \"subject_code\": \"TCS-601\"\n        },\n        {\n            \"subject_name\": \"Network and System Security\",\n            \"subject_code\": \"TCS-603\"\n        },\n        {\n            \"subject_name\": \"Computer Networks\",\n            \"subject_code\": \"TCS-602\"\n        },\n        {\n            \"subject_name\": \"Compiler Design\",\n            \"subject_code\": \"TCS-604\"\n        }\n    ],\n    \"pending_requests\": {\n        \"TCS-602\": [\n            {\n                \"LS-01\": \"Lokesh Singh\"\n            }\n        ],\n        \"TCS-603\": [\n            {\n                \"LS-01\": \"Lokesh Singh\"\n            }\n        ]\n    },\n    \"teachers\": [\n        {\n            \"teacher_name\": \"Atharva Raj Sinha\",\n            \"teacher_code\": \"ARS-01\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Approve requests",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"TCS-601\": [ \"ARS-01\", \"VC-01\" ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/approveSubjectRequests/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"approveSubjectRequests",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Approve requests response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"TCS-601\": [ \"ARS-01\", \"VC-01\" ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/approveSubjectRequests/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"approveSubjectRequests",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 21 Feb 2025 14:37:22 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "61"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Subjects approved and emails sent successfully!\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get approved subjects",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/getApprovedSubjects/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"getApprovedSubjects",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get approved subjects response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/getApprovedSubjects/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"getApprovedSubjects",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 21 Feb 2025 14:39:13 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.11.4"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept, origin"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "371"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"subject_code\": \"TCS-601\",\n        \"subject_name\": \"Placement Class\",\n        \"teachers\": [\n            {\n                \"ARS-01\": \"Atharva Raj Sinha\"\n            },\n            {\n                \"VC-01\": \"Vibha Chandola\"\n            }\n        ]\n    },\n    {\n        \"subject_code\": \"TCS-603\",\n        \"subject_name\": \"Network and System Security\",\n        \"teachers\": [\n            {\n                \"ARS-01\": \"Atharva Raj Sinha\"\n            },\n            {\n                \"G-01\": \"Gunjan \"\n            }\n        ]\n    },\n    {\n        \"subject_code\": \"TCS-604\",\n        \"subject_name\": \"Compiler Design\",\n        \"teachers\": [\n            {\n                \"ARS-01\": \"Atharva Raj Sinha\"\n            }\n        ]\n    }\n]"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		},
+		{
+			"key": "TOKEN",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

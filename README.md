@@ -67,3 +67,7 @@ Ensure you have the following installed:
 - **Timetable Integration**: Integrate with the Genetic Algorithm logic to dynamically generate timetables based on constraints.
 - **Authentication**: Add user roles (Admin, Faculty) for managing timetable access.
 - **Enhanced Scheduling Options**: Support for recurring events, holidays, and priority-based scheduling.
+
+
+## Star Developers:
+- Special thanks to @vibha-chandola, for the endless efforts to make this happen.

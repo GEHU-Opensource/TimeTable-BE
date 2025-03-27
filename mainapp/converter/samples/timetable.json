@@ -1,0 +1,79 @@
+{
+  "MONDAY": [
+    {
+      "teacher_id": "SKS",
+      "subject_id": "TCS-706",
+      "time_slot": "09:00-9:55"
+    },
+    {
+      "teacher_id": "HP",
+      "subject_id": "TIT-704",
+      "time_slot": "9:55-10:50"
+    },
+    {
+      "teacher_id": "SP",
+      "subject_id": "TCS-704",
+      "time_slot": "11:00-11:55"
+    },
+    {
+      "teacher_id": "AA",
+      "subject_id": "TCS-703",
+      "time_slot": "11:55-12:50"
+    },
+    {
+      "teacher_id": "DVP",
+      "subject_id": "Placement Classes",
+      "time_slot": "1:20-2:15"
+    },
+    {
+      "teacher_id": "SKS",
+      "subject_id": "TCS-706",
+      "time_slot": "3:10-4:05"
+    },
+    {
+      "teacher_id": "SP",
+      "subject_id": "TCS-704",
+      "time_slot": "4:05-5:00"
+    }
+  ],
+  "TUESDAY": [],
+  "WEDNESDAY": [],
+  "THURSDAY": [
+    {
+      "teacher_id": "HP",
+      "subject_id": "TIT-704",
+      "time_slot": "09:00-9:55"
+    },
+    {
+      "teacher_id": "HP",
+      "subject_id": "TIT-704",
+      "time_slot": "9:55-10:50"
+    },
+    {
+      "teacher_id": "AA",
+      "subject_id": "TCS-703",
+      "time_slot": "11:00-11:55"
+    },
+    {
+      "teacher_id": "SKS",
+      "subject_id": "TCS-706",
+      "time_slot": "11:55-12:50"
+    },
+    {
+      "teacher_id": "PDP",
+      "subject_id": "PDP Classes",
+      "time_slot": "1:20-2:15"
+    },
+    {
+      "teacher_id": "SP",
+      "subject_id": "TCS-704",
+      "time_slot": "3:10-4:05"
+    },
+    {
+      "teacher_id": "AA",
+      "subject_id": "TCS-703",
+      "time_slot": "4:05-5:00"
+    }
+  ],
+  "FRIDAY": []
+}

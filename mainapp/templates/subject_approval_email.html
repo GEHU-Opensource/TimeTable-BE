@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Subject Approval Notification</title>
+  </head>
+  <body>
+    <p>Dear {{ teacher_name }},</p>
+
+    <p>We have processed your subject preferences. Below are the results:</p>
+
+    {% if approved_subjects %}
+    <p><strong>Approved Subjects:</strong></p>
+    <ul>
+      {% for subject in approved_subjects %}
+      <li>{{ subject }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% if rejected_subjects %}
+    <p><strong>Rejected Subjects:</strong></p>
+    <ul>
+      {% for subject in rejected_subjects %}
+      <li>{{ subject }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% if not approved_subjects and not rejected_subjects %}
+    <p>No subject preferences were processed.</p>
+    {% elif approved_subjects and not rejected_subjects %}
+    <p>All your preferred subjects were approved!</p>
+    {% endif %}
+
+    <p>
+      If you have any questions or concerns, please feel free to contact the
+      HOD.
+    </p>
+
+    <p>Best Regards,</p>
+    <p>HOD, {{ department_name }}</p>
+    <p>{{ hod_name }}</p>
+  </body>
+</html>

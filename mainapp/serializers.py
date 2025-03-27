@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Room, Teacher, Subject, TeacherSubject
+from .models import Room, Teacher, Subject, TeacherSubject, SubjectPreference
 
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -36,6 +36,12 @@ class TeacherSerializer(serializers.ModelSerializer):
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
+        fields = "__all__"
+
+
+class SubjectPreferenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubjectPreference
         fields = "__all__"
 
 

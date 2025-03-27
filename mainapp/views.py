@@ -1,18 +1,13 @@
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .drivers.mongodb_driver import MongoDriver
-from .drivers.postgres_driver import PostgresDriver
-from .models import Room, Teacher, Subject, TeacherSubject, Student
+from .models import Room, Teacher, Subject, TeacherSubject, Student, SubjectPreference
 from .serializers import (
     RoomSerializer,
     TeacherSerializer,
     SubjectSerializer,
+    SubjectPreferenceSerializer,
     ExcelFileUploadSerializer,
 )
 import os
@@ -26,12 +21,45 @@ from Constants.is_conflict import IsConflict
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+<<<<<<< HEAD
 from django.http import HttpResponse
 from gridfs import GridFS
 import string
 import io
 import zipfile
 from bson import ObjectId
+=======
+from django.contrib.auth.hashers import check_password
+import asyncio
+from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
+import threading
+
+
+def send_email_async(subject, template_name, context, recipient_email):
+    """
+    Sends an email asynchronously using a separate thread.
+    """
+
+    def send():
+        html_content = render_to_string(template_name, context)  # Render HTML template
+        text_content = strip_tags(html_content)  # Remove HTML tags for plain-text email
+
+        email = EmailMultiAlternatives(
+            subject,
+            text_content,
+            None,  # Uses default email sender from settings
+            [recipient_email],
+        )
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+    thread = threading.Thread(target=send)
+    thread.start()
+>>>>>>> 6c3edb1851c0c1df6a778f73564eaf0a35ac8e5c
 
 
 @api_view(["POST"])
@@ -51,7 +79,6 @@ def login(request):
     if not user:
         return Response({"error": "Invalid email or password."}, status=401)
 
-    # Authenticate using username
     user = authenticate(username=user.username, password=password)
 
     if not user:
@@ -72,43 +99,6 @@ def login(request):
             "teacher": {
                 "teacher_type": teacher.teacher_type,
             },
-        },
-        status=200,
-    )
-
-
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def getSpecificTeacher(request):
-    """
-    Retrieve the details of the authenticated teacher.
-    """
-    user = request.user
-    teacher = Teacher.objects.filter(user=user).first()
-
-    if not teacher:
-        return Response({"error": "Teacher account not found."}, status=404)
-
-    subject_codes = TeacherSubject.get_teacher_subjects(teacher.teacher_code)
-
-    subject_names = list(
-        Subject.objects.filter(subject_code__in=subject_codes).values_list(
-            "subject_name", flat=True
-        )
-    )
-
-    return Response(
-        {
-            "id": teacher.id,
-            "name": user.get_full_name(),
-            "email": user.email,
-            "teacher_code": teacher.teacher_code,
-            "teacher_type": teacher.teacher_type,
-            "phone": teacher.phone,
-            "department": teacher.department,
-            "designation": teacher.designation,
-            "working_days": teacher.working_days,
-            "preferred_subjects": subject_names,
         },
         status=200,
     )
@@ -140,43 +130,6 @@ def generate_timetable(request):
         return Response(
             {"error": f"Failed to generate timetable: {str(e)}"}, status=500
         )
-
-
-@api_view(["GET"])
-@permission_classes([AllowAny])
-def mongo_status(request):
-    """
-    Check MongoDB connection status.
-    """
-    try:
-        mongo_driver = MongoDriver()
-        collections = mongo_driver.db.list_collection_names()
-        return JsonResponse({"mongodb": "Connected", "collections": collections})
-    except Exception as e:
-        return JsonResponse({"mongodb": "Not Connected", "error": str(e)})
-
-
-@api_view(["GET"])
-@permission_classes([AllowAny])
-def postgres_status(request):
-    """
-    Check PostgreSQL connection status.
-    """
-    try:
-        postgres_driver = PostgresDriver(
-            dbname=os.getenv("POSTGRES_NAME"),
-            user=os.getenv("POSTGRES_USER"),
-            host=os.getenv("POSTGRES_HOST"),
-            password=os.getenv("POSTGRES_PASSWORD"),
-            port=os.getenv("POSTGRES_PORT"),
-            options="-c search_path=public",
-            logger=None,
-        )
-        query = "SELECT 1;"  # Simple query to validate the connection
-        result = postgres_driver.execute_query(query)
-        return JsonResponse({"postgresql": "Connected", "result": result})
-    except Exception as e:
-        return JsonResponse({"postgresql": "Not Connected", "error": str(e)})
 
 
 @api_view(["GET"])
@@ -284,12 +237,49 @@ def getTeachers(request):
     return Response(serializer.data, status=200)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getSpecificTeacher(request):
+    """
+    Retrieve the details of the authenticated teacher.
+    """
+    user = request.user
+    teacher = Teacher.objects.filter(user=user).first()
+
+    if not teacher:
+        return Response({"error": "Teacher account not found."}, status=404)
+
+    subject_codes = TeacherSubject.get_teacher_subjects(teacher.teacher_code)
+
+    subject_names = list(
+        Subject.objects.filter(subject_code__in=subject_codes).values_list(
+            "subject_name", flat=True
+        )
+    )
+
+    return Response(
+        {
+            "id": teacher.id,
+            "name": user.get_full_name(),
+            "email": user.email,
+            "teacher_code": teacher.teacher_code,
+            "teacher_type": teacher.teacher_type,
+            "phone": teacher.phone,
+            "department": teacher.department,
+            "designation": teacher.designation,
+            "working_days": teacher.working_days,
+            "assigned_subjects": subject_names,
+        },
+        status=200,
+    )
+
+
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def addTeacher(request):
     """
     Add a new teacher, generate a unique teacher_code & password,
-    map preferred subjects in JSONField, and send credentials via email.
+    store preferred subjects in SubjectPreference, and send credentials via email.
     """
     teacher_data = request.data
 
@@ -305,18 +295,21 @@ def addTeacher(request):
 
     teacher_code = Teacher.generate_teacher_code(full_name)
     first_name = full_name.split()[0]
-    raw_password = f"{first_name}{teacher_code}"
 
-    # Create User and hash password automatically
     user = User.objects.create_user(
         username=teacher_code.lower(),
         email=email,
-        first_name=full_name.split()[0],
+        first_name=first_name,
         last_name=" ".join(full_name.split()[1:]),
-        password=raw_password,
     )
 
-    # Create the Teacher linked to User
+    initials = "".join([part[0] for part in full_name.split()])
+    teacher_id = str(user.id)
+    raw_password = f"{first_name}@{initials}-{teacher_id}"
+
+    user.set_password(raw_password)
+    user.save()
+
     teacher = Teacher.objects.create(
         user=user,
         phone=teacher_data.get("phone", ""),
@@ -328,45 +321,33 @@ def addTeacher(request):
     )
 
     subject_names = teacher_data.get("preferred_subjects", [])
-    # Convert subject names to subject codes
-    subject_codes = []
     for subject_name in subject_names:
         subject = Subject.objects.filter(subject_name=subject_name).first()
         if subject:
-            subject_codes.append(subject.subject_code)
+            SubjectPreference.add_preference(
+                subject.department, subject.subject_code, teacher_code, full_name
+            )
         else:
             return Response(
                 {"error": f"Subject '{subject_name}' not found."}, status=404
             )
 
-    # Map preferred subjects using subject codes
-    for subject_code in subject_codes:
-        TeacherSubject.add_teacher_to_subject(subject_code, teacher_code)
+    # Prepare email context
+    email_context = {
+        "teacher_name": full_name,
+        "preferred_subjects": subject_names,
+        "teacher_code": teacher_code,
+        "email": email,
+        "password": raw_password,
+    }
 
-    # Send email with credentials
-    email_subject = "Your Teacher Account Credentials"
-    email_body = render_to_string(
-        "emails/teacher_confirmation_email.html",
-        {
-            "teacher_name": full_name,
-            "teacher_code": teacher_code,
-            "preferred_subjects": subject_names,
-            "email": email,
-            "password": raw_password,
-        },
+    # Send email asynchronously using threading
+    send_email_async(
+        subject="Your Teacher Account Credentials",
+        template_name="teacher_confirmation_email.html",
+        context=email_context,
+        recipient_email=email,
     )
-
-    try:
-        send_mail(
-            email_subject,
-            email_body,
-            settings.EMAIL_HOST_USER,
-            [email],
-            fail_silently=False,
-            html_message=email_body,
-        )
-    except Exception as e:
-        return Response({"error": f"Failed to send email: {str(e)}"}, status=500)
 
     return Response(
         {"message": "Teacher added successfully, credentials sent via email."},
@@ -378,7 +359,7 @@ def addTeacher(request):
 @permission_classes([IsAuthenticated])
 def updateTeacher(request, pk):
     """
-    Update an existing teacher's details by ID, including preferred subjects.
+    Update an existing teacher's details by ID.
     """
     try:
         teacher = Teacher.objects.get(id=pk)
@@ -389,50 +370,13 @@ def updateTeacher(request, pk):
         if serializer.is_valid():
             serializer.save()
 
-            if "preferred_subjects" in request.data:
-                new_subject_names = request.data["preferred_subjects"]
-                teacher_code = teacher.teacher_code
+            subject_codes = TeacherSubject.get_teacher_subjects(teacher.teacher_code)
 
-                # Fetch existing mapping and remove teacher from all assigned subjects
-                try:
-                    mapping = TeacherSubject.objects.get(id=1)
-                    for subject_code in list(mapping.subject_teacher_map.keys()):
-                        if teacher_code in mapping.subject_teacher_map[subject_code]:
-                            mapping.subject_teacher_map[subject_code].remove(
-                                teacher_code
-                            )
-                            if not mapping.subject_teacher_map[
-                                subject_code
-                            ]:  # Remove key if empty
-                                del mapping.subject_teacher_map[subject_code]
-                    mapping.save()
-                except TeacherSubject.DoesNotExist:
-                    pass  # No mapping exists yet, so nothing to remove
-
-                # Convert subject names to subject codes
-                subject_codes = []
-                for subject_name in new_subject_names:
-                    subject = Subject.objects.filter(subject_name=subject_name).first()
-                    if subject:
-                        subject_codes.append(subject.subject_code)
-                    else:
-                        return Response(
-                            {"error": f"Subject '{subject_name}' not found."},
-                            status=404,
-                        )
-
-                # Add teacher to new preferred subjects
-                for subject_code in subject_codes:
-                    TeacherSubject.add_teacher_to_subject(subject_code, teacher_code)
-
-            # Fetch updated subject names for response
-            updated_subject_codes = TeacherSubject.get_teacher_subjects(
-                teacher.teacher_code
+            subject_names = list(
+                Subject.objects.filter(subject_code__in=subject_codes).values_list(
+                    "subject_name", flat=True
+                )
             )
-            updated_subject_names = [
-                Subject.objects.get(subject_code=code).subject_name
-                for code in updated_subject_codes
-            ]
 
             return Response(
                 {
@@ -444,7 +388,7 @@ def updateTeacher(request, pk):
                     "department": teacher.department,
                     "designation": teacher.designation,
                     "working_days": teacher.working_days,
-                    "preferred_subjects": updated_subject_names,
+                    "assigned_subjects": subject_names,
                 },
                 status=200,
             )
@@ -469,6 +413,223 @@ def deleteTeacher(request, pk):
         return Response({"error": "Teacher not found"}, status=404)
 
 
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def updatePassword(request):
+    """
+    Allows a teacher to update their login password.
+    """
+    user = request.user
+    data = request.data
+
+    old_password = data.get("old_password", "").strip()
+    new_password = data.get("new_password", "").strip()
+    confirm_password = data.get("confirm_password", "").strip()
+
+    if not old_password or not new_password or not confirm_password:
+        return Response({"error": "All fields are required."}, status=400)
+
+    if not check_password(old_password, user.password):
+        return Response({"error": "Old password is incorrect."}, status=400)
+
+    if new_password != confirm_password:
+        return Response(
+            {"error": "New password and confirm password do not match."}, status=400
+        )
+
+    if len(new_password) < 8:
+        return Response(
+            {"error": "New password must be at least 8 characters long."}, status=400
+        )
+
+    user.set_password(new_password)
+    user.save()
+
+    return Response({"message": "Password updated successfully."}, status=200)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getPendingRequests(request):
+    """
+    API to fetch pending subject-teacher requests for a department.
+    """
+
+    try:
+        hod = Teacher.objects.get(user=request.user, teacher_type="hod")
+        department = hod.department
+    except Teacher.DoesNotExist:
+        return Response({"error": "HOD access required"}, status=403)
+
+    # Fetch all subjects in the department
+    subjects = Subject.objects.filter(department=department).values(
+        "subject_name", "subject_code"
+    )
+
+    # Fetch requested subject-teacher mappings
+    pending_requests = SubjectPreference.get_subject_preferences(department)
+
+    # Fetch all teachers in the department
+    teachers = Teacher.objects.filter(department=department).values(
+        "user__first_name", "user__last_name", "teacher_code"
+    )
+
+    # Format teachers data properly
+    teacher_list = [
+        {
+            "teacher_name": f"{t['user__first_name']} {t['user__last_name']}",
+            "teacher_code": t["teacher_code"],
+        }
+        for t in teachers
+    ]
+
+    return Response(
+        {
+            "subjects": list(subjects),
+            "pending_requests": pending_requests,
+            "teachers": teacher_list,
+        }
+    )
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def approveSubjectRequests(request):
+    """
+    Approves the selected subject requests by the HOD and updates TeacherSubject mapping. Sends an email notification to teachers about approved and rejected subjects asynchronously.
+    """
+    try:
+        approved_requests = request.data
+        # Dictionary with subject_code -> list of teacher codes
+        teacher_mapping = TeacherSubject.objects.get_or_create(id=1)[0]
+
+        hod = Teacher.objects.get(user=request.user)
+        hod_name = hod.user.get_full_name()
+        department_name = hod.department
+
+        subject_pref = SubjectPreference.objects.get_or_create(id=1)[0]
+        department_preferences = subject_pref.preferences.get(department_name, {})
+
+        approved_teachers = set()
+        rejected_teachers = {}
+
+        approved_subjects_per_teacher = {}
+
+        # Approve subjects and track approved teachers
+        for subject_code, teacher_codes in approved_requests.items():
+            for teacher_code in teacher_codes:
+                teacher = Teacher.objects.filter(teacher_code=teacher_code).first()
+                if teacher:
+                    teacher_mapping.add_teacher_to_subject(
+                        subject_code, teacher.teacher_code
+                    )
+                    approved_teachers.add((teacher_code, subject_code))
+                    approved_subjects_per_teacher.setdefault(teacher_code, []).append(
+                        subject_code
+                    )
+
+        # Identify rejected subjects per teacher
+        for subject_code, teacher_list in department_preferences.items():
+            for teacher_entry in teacher_list:
+                for teacher_code in teacher_entry.keys():
+                    if (teacher_code, subject_code) not in approved_teachers:
+                        rejected_teachers.setdefault(teacher_code, []).append(
+                            subject_code
+                        )
+
+        # Remove all subject preferences for the department
+        if department_name in subject_pref.preferences:
+            del subject_pref.preferences[department_name]
+            subject_pref.save()
+
+        # Send emails asynchronously
+        for teacher_code in set(
+            list(approved_subjects_per_teacher.keys()) + list(rejected_teachers.keys())
+        ):
+            teacher = Teacher.objects.filter(teacher_code=teacher_code).first()
+            if teacher and teacher.user.email:
+
+                approved_subjects = [
+                    Subject.objects.get(subject_code=sub).subject_name
+                    for sub in approved_subjects_per_teacher.get(teacher_code, [])
+                ]
+
+                rejected_subjects = [
+                    Subject.objects.get(subject_code=sub).subject_name
+                    for sub in rejected_teachers.get(teacher_code, [])
+                ]
+
+                email_context = {
+                    "teacher_name": teacher.user.get_full_name(),
+                    "approved_subjects": approved_subjects,
+                    "rejected_subjects": rejected_subjects,
+                    "hod_name": hod_name,
+                    "department_name": department_name,
+                }
+
+                send_email_async(
+                    subject="Subject Preference Approval Status",
+                    template_name="subject_approval_email.html",
+                    context=email_context,
+                    recipient_email=teacher.user.email,
+                )
+
+        return Response(
+            {"message": "Subjects approved and emails sent successfully!"}, status=200
+        )
+
+    except Teacher.DoesNotExist:
+        return Response({"error": "HOD not found or unauthorized"}, status=403)
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+
+
+def get_teacher_name(teacher_code):
+    """Helper function to get teacher's full name from teacher_code."""
+    teacher = Teacher.objects.filter(teacher_code=teacher_code).first()
+    return (
+        f"{teacher.user.first_name} {teacher.user.last_name}" if teacher else "Unknown"
+    )
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getApprovedSubjects(request):
+    """
+    Fetches the approved subjects of the HOD's department along with the assigned teacher names.
+    """
+    try:
+        hod = Teacher.objects.filter(user=request.user, teacher_type="hod").first()
+        if not hod:
+            return Response({"error": "Only HODs can access this data"}, status=403)
+
+        teacher_subject_mapping = TeacherSubject.objects.get_or_create(id=1)[0]
+        approved_subjects = []
+
+        for (
+            subject_code,
+            teacher_codes,
+        ) in teacher_subject_mapping.subject_teacher_map.items():
+            # Fetch the subject and check if it belongs to the HOD's department
+            subject = Subject.objects.filter(
+                subject_code=subject_code, department=hod.department
+            ).first()
+            if subject:
+                approved_subjects.append(
+                    {
+                        "subject_code": subject_code,
+                        "subject_name": subject.subject_name,
+                        "teachers": [
+                            {code: get_teacher_name(code)} for code in teacher_codes
+                        ],
+                    }
+                )
+
+        return Response(approved_subjects, status=200)
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+
+
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def getAllSubjects(request):
@@ -486,19 +647,19 @@ def getFilteredSubjects(request):
     """
     Retrieve subjects based on department, course, branch, and semester.
     """
-    dept = request.GET.get("dept")
+    department = request.GET.get("department")
     course = request.GET.get("course")
     branch = request.GET.get("branch", "")
     semester = request.GET.get("semester")
 
-    if not all([dept, course, semester]):
+    if not all([department, course, semester]):
         return Response(
-            {"error": "Please provide dept, course, and semester."},
+            {"error": "Please provide department, course, and semester."},
             status=400,
         )
 
     filters = {
-        "dept": dept,
+        "department": department,
         "course": course,
         "semester": semester,
     }
@@ -514,23 +675,23 @@ def getFilteredSubjects(request):
 @permission_classes([IsAuthenticated])
 def addSubject(request):
     """
-    Add one or multiple subjects to a specific dept, course, branch, and semester.
+    Add one or multiple subjects to a specific department, course, branch, and semester.
     """
     data = request.data if isinstance(request.data, list) else [request.data]
     added_subjects = []
     errors = []
 
     for subject_data in data:
-        dept = subject_data.get("dept")
+        department = subject_data.get("department")
         course = subject_data.get("course")
         branch = subject_data.get("branch", "")
         semester = subject_data.get("semester")
 
-        if not all([dept, course, semester]):
+        if not all([department, course, semester]):
             errors.append(
                 {
                     "subject_data": subject_data,
-                    "error": "Please provide dept, course, and semester for each subject.",
+                    "error": "Please provide department, course, and semester for each subject.",
                 }
             )
             continue
@@ -566,7 +727,7 @@ def addSubject(request):
             "credits": credits,
             "weekly_quota_limit": weekly_quota_limit,
             "is_special_subject": is_special_subject,
-            "dept": dept,
+            "department": department,
             "course": course,
             "branch": branch,
             "semester": semester,
@@ -642,7 +803,7 @@ def addStudent(
     student_id,
     is_hosteller,
     location,
-    dept,
+    department,
     course,
     branch,
     year,
@@ -650,7 +811,35 @@ def addStudent(
     cgpa,
 ):
     try:
+<<<<<<< HEAD
         return {"status": "success", "message": "Student processing handled by MongoDB"}
+=======
+        student, created = Student.objects.get_or_create(
+            student_id=student_id,
+            defaults={
+                "student_name": student_name,
+                "is_hosteller": is_hosteller,
+                "location": location,
+                "department": department,
+                "course": course,
+                "branch": branch,
+                "semester": semester,
+                "section": section,
+                "cgpa": cgpa,
+            },
+        )
+        if created:
+            return {
+                "status": "success",
+                "message": "Student added successfully",
+                "student": student,
+            }
+        else:
+            return {
+                "status": "error",
+                "message": f"Student ID {student_id} already exists.",
+            }
+>>>>>>> 6c3edb1851c0c1df6a778f73564eaf0a35ac8e5c
     except Exception as e:
         print(f"Error adding student {student_id}: {str(e)}") 
         return {"status": "error", "message": str(e)}
@@ -684,7 +873,68 @@ def addStudentAPI(request):
             if data.empty:
                 continue
             students_list = data.to_dict(orient="records")
+<<<<<<< HEAD
             all_students.extend(students_list)
+=======
+
+            processed_students = StudentScorer(
+                students_list
+            ).entry_point_for_section_divide()
+
+            failed_rows = []
+            required_fields = [
+                "student_name",
+                "student_id",
+                "department",
+                "course",
+                "branch",
+                "semester",
+            ]
+
+            for index, row in enumerate(processed_students):
+                missing_fields = [
+                    field for field in required_fields if not row.get(field)
+                ]
+                if missing_fields:
+                    failed_rows.append(
+                        {
+                            "row": index + 1,
+                            "error": f"Missing fields: {', '.join(missing_fields)}",
+                        }
+                    )
+                    continue
+
+                student_data = {
+                    "student_name": row.get("student_name"),
+                    "student_id": row.get("student_id"),
+                    "is_hosteller": row.get("is_hosteller"),
+                    "location": row.get("location"),
+                    "department": row.get("department"),
+                    "course": row.get("course"),
+                    "branch": row.get("branch"),
+                    "semester": row.get("semester"),
+                    "section": row.get("section"),
+                    "cgpa": row.get("cgpa"),
+                }
+
+                result = addStudent(**student_data)
+
+                if result["status"] != "success":
+                    failed_rows.append({"row": index + 1, "error": result["message"]})
+
+            if failed_rows:
+                # print(f"Some students could not be added: {failed_rows}")
+                return Response(
+                    {
+                        "message": "Some students could not be added",
+                        "errors": failed_rows,
+                    },
+                    status=400,
+                )
+
+            return Response({"message": "All students added successfully"}, status=200)
+
+>>>>>>> 6c3edb1851c0c1df6a778f73564eaf0a35ac8e5c
         except Exception as e:
             return Response({"error": f"Error processing {file.name}: {str(e)}"}, status=400)
 

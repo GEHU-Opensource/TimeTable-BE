@@ -1,6 +1,7 @@
 import os
-from dotenv import load_dotenv
 from datetime import timedelta
+
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -51,7 +52,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),  # Short lifespan for security
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),  # Short lifespan for security
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),  # Allows re-authentication
     "ROTATE_REFRESH_TOKENS": True,  # Generate new refresh tokens on refresh
     "BLACKLIST_AFTER_ROTATION": True,  # Blacklist old refresh tokens after rotation
@@ -98,15 +99,17 @@ TEMPLATES = [
 WSGI_APPLICATION = "timetable.wsgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_NAME"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "PORT": os.getenv("POSTGRES_PORT"),
-    },
+    'default': {
+         'ENGINE': 'django.db.backends.postgresql',
+         'NAME': os.getenv("POSTGRES_NAME", "timetable"),
+         'USER': os.getenv("POSTGRES_USER", "postgres"),
+         'PASSWORD': os.getenv("POSTGRES_PASSWORD", "password"),
+         'HOST': os.getenv("POSTGRES_HOST", "localhost"),
+         'PORT': os.getenv("POSTGRES_PORT", "5432"),
+    }
 }
+
+APPEND_SLASH = False
 
 # Email configurations
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
@@ -143,7 +146,8 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
