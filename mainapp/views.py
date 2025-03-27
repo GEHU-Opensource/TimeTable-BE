@@ -637,7 +637,6 @@ def deleteSubject(request, pk):
     except Subject.DoesNotExist:
         return Response({"error": "Subject not found"}, status=404)
 
-
 def addStudent(
     student_name,
     student_id,
@@ -646,51 +645,25 @@ def addStudent(
     dept,
     course,
     branch,
-    semester,
+    year,
     section,
     cgpa,
 ):
     try:
-        student, created = Student.objects.get_or_create(
-            student_id=student_id,
-            defaults={
-                "student_name": student_name,
-                "is_hosteller": is_hosteller,
-                "location": location,
-                "dept": dept,
-                "course": course,
-                "branch": branch,
-                "semester": semester,
-                "section": section,
-                "cgpa": cgpa,
-            },
-        )
-        if created:
-            return {
-                "status": "success",
-                "message": "Student added successfully",
-                "student": student,
-            }
-        else:
-            return {
-                "status": "error",
-                "message": f"Student ID {student_id} already exists.",
-            }
+        return {"status": "success", "message": "Student processing handled by MongoDB"}
     except Exception as e:
-        print(f"Error adding student {student_id}: {str(e)}")  # Debugging
+        print(f"Error adding student {student_id}: {str(e)}") 
         return {"status": "error", "message": str(e)}
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def addStudentAPI(request):
     mongo = MongoDriver()
-    fs = GridFS(mongo.db)
     files = request.FILES.getlist("file")  
-    dept = request.data.get("dept")
+    dept = request.data.get("department")
     course = request.data.get("course")
     branch = request.data.get("branch")
     year = request.data.get("year")
-    semester = request.data.get("semester")
     total_sections = request.data.get("total_sections")
 
     if not files:
@@ -722,23 +695,10 @@ def addStudentAPI(request):
     class_strength = total_students // total_sections
     extra_students = total_students % total_sections  
 
-    # Step 1: Assign Scores Using Student Scorer
     scorer = StudentScorer()
     students_with_scores = scorer.assign_scores_to_students(all_students)
-
-    print("Students before sorting:")
-    for student in students_with_scores:
-        print(f"{student['student_name']} - Score: {student['score']}")
-    
-    # Sort students by score in descending order
     students_with_scores.sort(key=lambda x: x["score"], reverse=True)
     
-    # Debugging statement: Print sorted students based on score
-    print("Sorted students by score:")
-    for student in students_with_scores:
-        print(f"{student['student_name']} - Score: {student['score']}")
-    
-    # Label sections (A, B, C...)
     def get_section_label(index):
         letters = string.ascii_uppercase
         if index < 26:
@@ -747,8 +707,6 @@ def addStudentAPI(request):
             return letters[(index // 26) - 1] + letters[index % 26]
     
     section_labels = [get_section_label(i) for i in range(total_sections)]
-    
-    # Allocate students so that Section A is filled first, then Section B, and so on
     sections = {label: [] for label in section_labels}
     student_index = 0
     
@@ -757,103 +715,105 @@ def addStudentAPI(request):
             sections[section].append(students_with_scores[student_index])
             student_index += 1
     
-    # Distribute extra students among sections
     for i in range(extra_students):
         sections[section_labels[i]].append(students_with_scores[student_index])
         student_index += 1
-    
-    print("\n--- Debug: Student Section Allocation ---")
-    for label, students in sections.items():
-        for student in students:
-            print(f"Student: {student['student_name']}, Score: {student['score']}, Assigned Section: {label}")
 
-    # Allocate students to sections
-    for label, students in sections.items():
-        for student in students:
-            student["section"] = label  # 🔹 Ensure the assigned section is updated
-            addStudent(
-                student_name=student["student_name"],
-                student_id=student["student_id"],
-                is_hosteller=student["is_hosteller"],
-                location=student["location"],
-                dept=dept,
-                course=course,
-                branch=branch,
-                semester=int(semester),
-                section=label,  
-                cgpa=float(student["cgpa"]),
-            )
+    if "student_distribution" not in mongo.list_collections():
+        mongo.db.create_collection("student_distribution")
+    mongo.delete_many("student_distribution", {"course": course, "department": dept, "branch": branch, "year": year})
+    student_distribution = {
+        "course": course,
+        "department": dept,
+        "branch": branch,
+        "year": year,
+        "sections": []
+    }
 
-    section_entries = []
     for section, students in sections.items():
-        section_data = {
-            "dept": dept,
-            "course": course,
-            "branch": branch,
-            "year": year,
-            "semester": semester,
+        student_distribution["sections"].append({
             "section": section,
-            "students": students,
-        }
-        inserted = mongo.insert_one("sections", section_data)
-        section_entries.append({
-            "section": section,
-            "mongo_id": str(inserted.inserted_id)
+            "strength": len(students),
+            "students": students
         })
 
-    return Response({
-        "message": "Students processed successfully",
-        "total_students": len(all_students),
-        "sections": section_entries, 
-    }, status=200)
+    inserted = mongo.insert_one("student_distribution", student_distribution)
+    
+    if "section" not in mongo.list_collections():
+        mongo.db.create_collection("section")
+    mongo.delete_many("section", {"course": course, "department": dept, "branch": branch, "year": year})
+    section_structure = {
+        "course": course,
+        "department": dept,
+        "branch": branch,
+        "year": year,
+        "total_sections": total_sections,
+        "sections": [{"section": sec["section"], "strength": sec["strength"]} for sec in student_distribution["sections"]]
+    }
+    
+    mongo.insert_one("section", section_structure)
 
+    return Response({
+        "message": "Students processed successfully"
+    }, status=200)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def listSections(request):
     mongo = MongoDriver()
-    sections_cursor = mongo.find("sections", {})
+    sections_cursor = mongo.find("student_distribution", {})
     sections = []
-    
-    for section in sections_cursor:
-        sections.append({
-            "mongo_id": str(section["_id"]),
-            "dept": section["dept"],
-            "course": section["course"],
-            "branch": section["branch"],
-            "year": section["year"],
-            "semester": section["semester"],
-            "section": section["section"]
-        })
-    
+
+    for record in sections_cursor:
+        for section in record["sections"]:
+            sections.append({
+                "mongo_id": str(record["_id"]),
+                "course": record["course"],
+                "department": record["department"],
+                "branch": record["branch"],
+                "year": record["year"],
+                "section": section["section"]
+            })
+
     return Response({"sections": sections}, status=200)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def downloadSections(request, mongo_id):
+def downloadSections(request, mongo_id, section_label):
     mongo = MongoDriver()
 
     try:
-        object_id = ObjectId(mongo_id)  # 🔥 Convert string to ObjectId
+        object_id = ObjectId(mongo_id)  
     except Exception:
         return Response({"error": "Invalid section ID"}, status=400)
 
-    section_cursor = mongo.find("sections", {"_id": object_id}).limit(1)
+    section_cursor = mongo.find("student_distribution", {"_id": object_id}).limit(1)
     section_list = list(section_cursor)
 
     if not section_list:
         return Response({"error": "Section not found"}, status=404)
 
     section_data = section_list[0]
-    df = pd.DataFrame(section_data["students"])
+
+    section_to_download = None
+    for section in section_data["sections"]:
+        if section["section"] == section_label:
+            section_to_download = section
+            break
+
+    if not section_to_download:
+        return Response({"error": "Section not found"}, status=404)
+
+    df = pd.DataFrame(section_to_download["students"])
     csv_buffer = io.StringIO()
     df.to_csv(csv_buffer, index=False)
 
-    filename = f"{section_data['dept']}_{section_data['course']}_{section_data['branch']}_{section_data['year']}_Sem{section_data['semester']}_Sec{section_data['section']}.csv"
+    filename = f"{section_data['course']}_{section_data['department']}_{section_data['branch']}_{section_data['year']}_Sec{section_label}.csv"
     response = HttpResponse(csv_buffer.getvalue(), content_type="text/csv")
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
 
     return response
+
 
 
 @csrf_exempt

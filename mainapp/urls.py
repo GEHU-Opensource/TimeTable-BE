@@ -80,6 +80,6 @@ urlpatterns = [
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="redoc-ui"),
     # csv to chromosome
     path("addStudentAPI/", addStudentAPI, name="addStudentAPI"),
-    path("download/<str:mongo_id>/", downloadSections, name="downloadSections"),
+    path('download/<str:mongo_id>/<str:section_label>/', downloadSections, name="download_sections"),
     path("listSections/",listSections,name="listSections"),
 ]
