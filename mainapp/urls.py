@@ -49,7 +49,7 @@ urlpatterns = [
     path("addTeacher/", add_teacher, name="add-Teacher"),
     path("updateTeacher/<int:pk>/", update_teacher, name="update-Teacher"),
     path("deleteTeacher/<int:pk>/", delete_teacher, name="delete-Teacher"),
-    path("updatePassword", update_password, name="update-Password"),
+    path("updatePassword/", update_password, name="update-Password"),
 
 
     # HOD APIs
@@ -67,7 +67,7 @@ urlpatterns = [
 
 
     # Timetable and Conflict APIs
-    path("timetable/generate", generate_timetable, name="generate-timetable"),
+    path("timetable/generate/", generate_timetable, name="generate-timetable"),
     path("detectConflicts/", detect_conflicts, name="detect-conflicts"),
     # path("update-timetable/", views.updateTimeTable, name="update-timetable"),
     # path("current-timetable/<str:course_id>/<int:semester>/", views.getCurrentTimeTable, name="get-current-timetable"),
@@ -76,7 +76,7 @@ urlpatterns = [
 
     # CSV and Student APIs
     path("addStudentAPI/", add_student_API, name="addStudentAPI"),
-    path("timetable/manual/upload", manual_timetable_upload, name="manualTimeTableUpload"),
+    path("timetable/manual/upload/", manual_timetable_upload, name="manualTimeTableUpload"),
 
 
     # Documentation
