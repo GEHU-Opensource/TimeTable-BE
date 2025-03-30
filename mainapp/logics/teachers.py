@@ -60,13 +60,38 @@ def get_specific_teacher(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_teachers(request):
+def get_all_teachers(request):
     """
-    Retrieve a list of all teachers along with their preferred subjects.
+    Retrieve the details of all teachers.
     """
     teachers = Teacher.objects.all()
-    serializer = TeacherSerializer(teachers, many=True)
-    return Response(serializer.data, status=200)
+
+    teacher_list = []
+    for teacher in teachers:
+        user = teacher.user
+        subject_codes = TeacherSubject.get_teacher_subjects(teacher.teacher_code)
+        assigned_subjects = list(
+            Subject.objects.filter(subject_code__in=subject_codes).values(
+                "subject_code", "subject_name"
+            )
+        )
+
+        teacher_list.append(
+            {
+                "id": teacher.id,
+                "name": user.get_full_name(),
+                "email": user.email,
+                "teacher_code": teacher.teacher_code,
+                "teacher_type": teacher.teacher_type,
+                "phone": teacher.phone,
+                "department": teacher.department,
+                "designation": teacher.designation,
+                "working_days": teacher.working_days,
+                "assigned_subjects": assigned_subjects,
+            }
+        )
+
+    return Response(teacher_list, status=200)
 
 
 @api_view(["POST"])

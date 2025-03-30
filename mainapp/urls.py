@@ -8,7 +8,7 @@ from .logics.login import login
 from .logics.rooms import get_rooms, add_room, update_room, delete_room
 from .logics.students import add_student_API
 from .logics.subjects import get_all_subjects, get_filtered_subjects, add_subject, update_subject, delete_subject
-from .logics.teachers import get_specific_teacher, get_teachers, add_teacher, update_teacher, delete_teacher, update_password
+from .logics.teachers import get_specific_teacher, get_all_teachers, add_teacher, update_teacher, delete_teacher, update_password
 from .logics.hod import get_pending_requests, approve_subject_requests, get_approved_subjects
 from .logics.timetable import generate_timetable, detect_conflicts, manual_timetable_upload
 
@@ -45,7 +45,7 @@ urlpatterns = [
 
     # Teacher APIs
     path("getSpecificTeacher/", get_specific_teacher, name="get-Specific-Teacher"),
-    path("getTeachers/", get_teachers, name="get-Teachers"),
+    path("getAllTeachers/", get_all_teachers, name="get-Teachers"),
     path("addTeacher/", add_teacher, name="add-Teacher"),
     path("updateTeacher/<int:pk>/", update_teacher, name="update-Teacher"),
     path("deleteTeacher/<int:pk>/", delete_teacher, name="delete-Teacher"),
