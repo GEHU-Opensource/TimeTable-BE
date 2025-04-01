@@ -247,13 +247,14 @@ def generate_timetable(request):
         teacher_subject_mapping = get_teacher_subject_mapping()
 
         if teacher_subject_mapping is None:
+            #todo: this should not be there if DB is empty then create a new one
             return Response(
                 {
                     "error": "Teacher subject mapping not found in Postgres."
                 },
                 status = 400
             )
-
+        #todo: there will be multiple departments so we need to get the total sections for each department
         get_section_query = "SELECT section, COUNT(*) AS section_count FROM public.mainapp_student GROUP BY section;"
         result = pg_driver.execute_query(get_section_query)
         total_sections = {row["section"]: row["section_count"] for row in result}
@@ -267,7 +268,7 @@ def generate_timetable(request):
             semester=semester,
             teacher_subject_mapping=teacher_subject_mapping,
             total_sections=total_sections,
-            total_classrooms={"R1": 200, "R2": 230, "R3": 240, "R4": 250, "R5": 250},
+            total_classrooms={"R1": 200, "R2": 230, "R3": 240, "R4": 250, "R5": 250}, #todo: remove there constants
             total_labs={"L1": 70, "L2": 50, "L3": 70, "L4": 50, "L5": 70, "L6": 50},
             teacher_preferences=TeacherWorkload.teacher_preferences,
             teacher_weekly_workload=TeacherWorkload.Weekly_workLoad,
