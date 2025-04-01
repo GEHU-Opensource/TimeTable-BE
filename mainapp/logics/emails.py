@@ -3,10 +3,10 @@ from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 import threading
 import requests
+from django.conf import settings
+from premailer import transform
 
-SLACK_WEBHOOK_URL = (
-    "https://hooks.slack.com/services/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"
-)
+SLACK_WEBHOOK_URL = settings.SLACK_WEBHOOK_URL
 
 
 def send_slack_notification(message):
@@ -30,6 +30,7 @@ def send_email_async(subject, template_name, context, recipient_email):
     def send():
         try:
             html_content = render_to_string(template_name, context)
+            html_content = transform(html_content)  # Convert styles to inline CSS
             text_content = strip_tags(html_content)
 
             email = EmailMultiAlternatives(

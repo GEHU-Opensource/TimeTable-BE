@@ -77,6 +77,7 @@ def add_subject(request):
         credits = subject_data.get("credits")
         weekly_quota_limit = subject_data.get("weekly_quota_limit")
         is_special_subject = subject_data.get("is_special_subject", "No")
+        is_lab = subject_data.get("is_lab", "No")
 
         if not all([subject_name, subject_code, credits, weekly_quota_limit]):
             errors.append(
@@ -102,6 +103,7 @@ def add_subject(request):
             "subject_code": subject_code,
             "credits": credits,
             "weekly_quota_limit": weekly_quota_limit,
+            "is_lab": is_lab,
             "is_special_subject": is_special_subject,
             "department": department,
             "course": course,

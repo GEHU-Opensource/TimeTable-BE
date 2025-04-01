@@ -1094,29 +1094,29 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/getTeachers/",
+							"raw": "{{BASE_URL}}/getAllTeachers/",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"getTeachers",
+								"getAllTeachers",
 								""
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "Get all Teachers",
+							"name": "Get all Teachers response",
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/getTeachers/",
+									"raw": "{{BASE_URL}}/getAllTeachers/",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"getTeachers",
+										"getAllTeachers",
 										""
 									]
 								}
@@ -1127,7 +1127,7 @@
 							"header": [
 								{
 									"key": "Date",
-									"value": "Tue, 18 Feb 2025 12:22:56 GMT"
+									"value": "Sun, 30 Mar 2025 09:50:01 GMT"
 								},
 								{
 									"key": "Server",
@@ -1143,7 +1143,7 @@
 								},
 								{
 									"key": "Allow",
-									"value": "GET, OPTIONS"
+									"value": "OPTIONS, GET"
 								},
 								{
 									"key": "X-Frame-Options",
@@ -1151,7 +1151,7 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "961"
+									"value": "1688"
 								},
 								{
 									"key": "X-Content-Type-Options",
@@ -1167,7 +1167,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n    {\n        \"id\": 56,\n        \"preferred_subjects\": [\n            \"TCS-602\"\n        ],\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Professor\",\n        \"working_days\": \"Monday-Friday\",\n        \"weekly_workload\": 20,\n        \"teacher_code\": \"LS-01\",\n        \"teacher_type\": \"faculty\",\n        \"user\": 23\n    },\n    {\n        \"id\": 57,\n        \"preferred_subjects\": [],\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Assistant Professor\",\n        \"working_days\": \"Monday-Friday\",\n        \"weekly_workload\": 20,\n        \"teacher_code\": \"GB-01\",\n        \"teacher_type\": \"faculty\",\n        \"user\": 24\n    },\n    {\n        \"id\": 58,\n        \"preferred_subjects\": [],\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Professor\",\n        \"working_days\": \"Monday-Friday\",\n        \"weekly_workload\": 20,\n        \"teacher_code\": \"ARS-01\",\n        \"teacher_type\": \"faculty\",\n        \"user\": 25\n    },\n    {\n        \"id\": 59,\n        \"preferred_subjects\": [],\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Professor\",\n        \"working_days\": \"Monday-Friday\",\n        \"weekly_workload\": 20,\n        \"teacher_code\": \"VC-01\",\n        \"teacher_type\": \"faculty\",\n        \"user\": 26\n    }\n]"
+							"body": "[\n    {\n        \"id\": 61,\n        \"name\": \"\",\n        \"email\": \"prachi@gehu.ac.in\",\n        \"teacher_code\": \"P-01\",\n        \"teacher_type\": \"admin\",\n        \"phone\": \"0000000000\",\n        \"department\": \"Administration\",\n        \"designation\": \"Super Admin\",\n        \"working_days\": \"Monday-Friday\",\n        \"assigned_subjects\": []\n    },\n    {\n        \"id\": 102,\n        \"name\": \"Atharva\",\n        \"email\": \"atharvarajsinha.23011353@gehu.ac.in\",\n        \"teacher_code\": \"A-01\",\n        \"teacher_type\": \"faculty\",\n        \"phone\": \"1234567890\",\n        \"department\": \"Civil Engineering\",\n        \"designation\": \"Professor\",\n        \"working_days\": \"Tuesday-Saturday\",\n        \"assigned_subjects\": [\n            {\n                \"subject_code\": \"TCS-603\",\n                \"subject_name\": \"Network and System Security\"\n            }\n        ]\n    },\n    {\n        \"id\": 104,\n        \"name\": \"Gunjan\",\n        \"email\": \"gunjanbhanwal.22012914@gehu.ac.in\",\n        \"teacher_code\": \"G-01\",\n        \"teacher_type\": \"faculty\",\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Adjunct\",\n        \"working_days\": \"Monday-Friday\",\n        \"assigned_subjects\": [\n            {\n                \"subject_code\": \"TCS-601\",\n                \"subject_name\": \"Placement Class\"\n            },\n            {\n                \"subject_code\": \"TCS-604\",\n                \"subject_name\": \"Compiler Design\"\n            }\n        ]\n    },\n    {\n        \"id\": 103,\n        \"name\": \"Vibha Chandola\",\n        \"email\": \"vibhachandola.220121207@gehu.ac.in\",\n        \"teacher_code\": \"VC-01\",\n        \"teacher_type\": \"hod\",\n        \"phone\": \"0123456789\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Adjunct\",\n        \"working_days\": \"Monday-Friday\",\n        \"assigned_subjects\": [\n            {\n                \"subject_code\": \"TCS-601\",\n                \"subject_name\": \"Placement Class\"\n            },\n            {\n                \"subject_code\": \"TCS-602\",\n                \"subject_name\": \"Computer Networks\"\n            }\n        ]\n    },\n    {\n        \"id\": 90,\n        \"name\": \"Test\",\n        \"email\": \"testing@gehu.ac.in\",\n        \"teacher_code\": \"T-01\",\n        \"teacher_type\": \"faculty\",\n        \"phone\": \"1234567890\",\n        \"department\": \"Computer Science Engineering\",\n        \"designation\": \"Professor\",\n        \"working_days\": \"Monday-Friday\",\n        \"assigned_subjects\": [\n            {\n                \"subject_code\": \"TCS-603\",\n                \"subject_name\": \"Network and System Security\"\n            },\n            {\n                \"subject_code\": \"TCS\",\n                \"subject_name\": \"Science\"\n            }\n        ]\n    }\n]"
 						}
 					]
 				},
@@ -1232,7 +1232,7 @@
 							"header": [
 								{
 									"key": "Date",
-									"value": "Fri, 21 Feb 2025 17:43:25 GMT"
+									"value": "Sat, 29 Mar 2025 16:11:02 GMT"
 								},
 								{
 									"key": "Server",
@@ -1248,7 +1248,7 @@
 								},
 								{
 									"key": "Allow",
-									"value": "GET, OPTIONS"
+									"value": "OPTIONS, GET"
 								},
 								{
 									"key": "X-Frame-Options",
@@ -1256,7 +1256,7 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "326"
+									"value": "387"
 								},
 								{
 									"key": "X-Content-Type-Options",
@@ -1272,7 +1272,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 58,\n    \"name\": \"Atharva Raj Sinha\",\n    \"email\": \"ath@gehu.ac.in\",\n    \"teacher_code\": \"ARS-01\",\n    \"teacher_type\": \"hod\",\n    \"phone\": \"1234567890\",\n    \"department\": \"Computer Science Engineering\",\n    \"designation\": \"Assistant Professor\",\n    \"working_days\": \"Monday-Friday\",\n    \"assigned_subjects\": [\n        \"Placement Class\",\n        \"Network and System Security\",\n        \"Compiler Design\"\n    ]\n}"
+							"body": "{\n    \"id\": 103,\n    \"name\": \"Vibha Chandola\",\n    \"email\": \"vibhachandola.220121207@gehu.ac.in\",\n    \"teacher_code\": \"VC-01\",\n    \"teacher_type\": \"hod\",\n    \"phone\": \"1234567890\",\n    \"department\": \"Computer Science Engineering\",\n    \"designation\": \"Adjunct\",\n    \"working_days\": \"Monday-Friday\",\n    \"assigned_subjects\": [\n        {\n            \"subject_code\": \"TCS-601\",\n            \"subject_name\": \"Placement Class\"\n        },\n        {\n            \"subject_code\": \"TCS-602\",\n            \"subject_name\": \"Computer Networks\"\n        }\n    ]\n}"
 						}
 					]
 				},
@@ -1412,20 +1412,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/updateTeacher/58/",
+							"raw": "{{BASE_URL}}/updateTeacher/103/",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"updateTeacher",
-								"58",
+								"103",
 								""
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "Update Teacher's details response",
+							"name": "Update a Teacher's details response",
 							"originalRequest": {
 								"method": "PUT",
 								"header": [],
@@ -1439,13 +1439,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/updateTeacher/58/",
+									"raw": "{{BASE_URL}}/updateTeacher/103/",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"updateTeacher",
-										"58",
+										"103",
 										""
 									]
 								}
@@ -1456,7 +1456,7 @@
 							"header": [
 								{
 									"key": "Date",
-									"value": "Fri, 21 Feb 2025 17:44:53 GMT"
+									"value": "Sat, 29 Mar 2025 16:15:53 GMT"
 								},
 								{
 									"key": "Server",
@@ -1472,7 +1472,7 @@
 								},
 								{
 									"key": "Allow",
-									"value": "OPTIONS, PUT"
+									"value": "PUT, OPTIONS"
 								},
 								{
 									"key": "X-Frame-Options",
@@ -1480,7 +1480,7 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "305"
+									"value": "366"
 								},
 								{
 									"key": "X-Content-Type-Options",
@@ -1496,7 +1496,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": 58,\n    \"name\": \"Atharva Raj Sinha\",\n    \"email\": \"ath@gehu.ac.in\",\n    \"teacher_code\": \"ARS-01\",\n    \"phone\": \"0123456789\",\n    \"department\": \"Computer Science Engineering\",\n    \"designation\": \"Assistant Professor\",\n    \"working_days\": \"Monday-Friday\",\n    \"assigned_subjects\": [\n        \"Placement Class\",\n        \"Network and System Security\",\n        \"Compiler Design\"\n    ]\n}"
+							"body": "{\n    \"id\": 103,\n    \"name\": \"Vibha Chandola\",\n    \"email\": \"vibhachandola.220121207@gehu.ac.in\",\n    \"teacher_code\": \"VC-01\",\n    \"phone\": \"0123456789\",\n    \"department\": \"Computer Science Engineering\",\n    \"designation\": \"Adjunct\",\n    \"working_days\": \"Monday-Friday\",\n    \"assigned_subjects\": [\n        {\n            \"subject_code\": \"TCS-601\",\n            \"subject_name\": \"Placement Class\"\n        },\n        {\n            \"subject_code\": \"TCS-602\",\n            \"subject_name\": \"Computer Networks\"\n        }\n    ]\n}"
 						}
 					]
 				},

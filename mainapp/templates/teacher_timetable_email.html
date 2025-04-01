@@ -3,19 +3,169 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your Updated Timetable</title>
+    <title>Your Updated Timetable - GEHU</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f7fa;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        padding-top: 20px;
+        text-align: center;
+      }
+
+      .logo {
+        max-width: 100px;
+        height: auto;
+      }
+
+      .content {
+        padding: 0px 30px 30px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        font-size: 24px;
+        margin-top: 0;
+      }
+
+      p {
+        margin-bottom: 16px;
+      }
+
+      .attachment-box {
+        background-color: #f8f4e5;
+        border-left: 4px solid #e67e22;
+        padding: 15px;
+        margin: 20px 0;
+      }
+
+      .attachment-icon {
+        font-size: 20px;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+      .btn {
+        display: inline-block;
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        padding: 12px 25px;
+        border-radius: 4px;
+        margin: 15px 0;
+        font-weight: 500;
+      }
+
+      .footer {
+        background-color: rgba(234, 237, 244, 0.5);
+        background-size: cover;
+        background-position: center;
+        padding: 20px;
+        text-align: center;
+        color: #000;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .footer p {
+        margin: 8px 0;
+      }
+
+      .footer a {
+        color: #000;
+        text-decoration: underline;
+      }
+
+      .footer strong {
+        font-weight: 700;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .logo {
+          max-width: 30px;
+        }
+
+        .content {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 20px;
+        }
+
+        .attachment-box {
+          padding: 12px;
+        }
+
+        .btn {
+          display: block;
+          text-align: center;
+        }
+
+        .footer {
+          padding: 25px 15px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <p>Dear {{ teacher_name }},</p>
+    <div class="email-container">
+      <div class="header">
+        <img
+          src="https://i.imgur.com/kPLQZRs.png"
+          alt="GEHU Logo"
+          class="logo"
+        />
+      </div>
 
-    <p>
-      Your updated timetable has been generated. Please find the attached CSV
-      file containing your detailed schedule.
-    </p>
+      <div class="content">
+        <h1>Your Timetable Has Been Updated</h1>
 
-    <p>If you have any questions or need assistance, feel free to reach out.</p>
+        <p>Dear {{ teacher_name }},</p>
 
-    <p>Best regards,</p>
-    <p>GEHU</p>
+        <p>
+          We're pleased to inform you that your updated timetable has been
+          generated.
+        </p>
+
+        <div class="attachment-box">
+          <p>
+            <span class="attachment-icon">📎</span>
+            <strong>Attached File:</strong> {{ teacher_code }}.csv
+          </p>
+        </div>
+
+        <p>
+          If you notice any discrepancies or have questions about your schedule,
+          please don't hesitate to contact us.
+        </p>
+
+        <p>Thank you for your dedication to our students and institution.</p>
+      </div>
+
+      <div class="footer">
+        <p><strong>Graphic Era Hill University, Bhimtal</strong></p>
+        <p>
+          <a href="mailto:timetablegehu@gmail.com">timetablegehu@gmail.com</a>
+        </p>
+        <p>&copy; {{ current_year }} GEHU. All rights reserved.</p>
+      </div>
+    </div>
   </body>
 </html>
