@@ -21,6 +21,14 @@ from Constants.is_conflict import IsConflict
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+<<<<<<< HEAD
+from django.http import HttpResponse
+from gridfs import GridFS
+import string
+import io
+import zipfile
+from bson import ObjectId
+=======
 from django.contrib.auth.hashers import check_password
 import asyncio
 from django.conf import settings
@@ -51,6 +59,7 @@ def send_email_async(subject, template_name, context, recipient_email):
 
     thread = threading.Thread(target=send)
     thread.start()
+>>>>>>> 6c3edb1851c0c1df6a778f73564eaf0a35ac8e5c
 
 
 @api_view(["POST"])
@@ -96,8 +105,15 @@ def login(request):
 
 
 def generateTimetable():
-    output = run_timetable_generation()
-    return output
+    output = run_timetable_generation() 
+    # chromosome_output, teacher_availability, classroom_availability = output
+    # mongo_driver = MongoDriver()
+    # mongo_driver.delete_many("teacher_availability", {})  
+    # mongo_driver.delete_many("classroom_availability", {})
+    # mongo_driver.insert_one("teacher_availability", teacher_availability)
+    # mongo_driver.insert_one("classroom_availability", classroom_availability)
+    return chromosome_output 
+
 
 
 @api_view(["POST"])
@@ -782,7 +798,6 @@ def deleteSubject(request, pk):
     except Subject.DoesNotExist:
         return Response({"error": "Subject not found"}, status=404)
 
-
 def addStudent(
     student_name,
     student_id,
@@ -791,7 +806,7 @@ def addStudent(
     department,
     course,
     branch,
-    semester,
+    year,
     section,
     cgpa,
 ):
@@ -822,91 +837,188 @@ def addStudent(
                 "message": f"Student ID {student_id} already exists.",
             }
     except Exception as e:
-        print(f"Error adding student {student_id}: {str(e)}")  # Debugging
+        print(f"Error adding student {student_id}: {str(e)}") 
         return {"status": "error", "message": str(e)}
-
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def addStudentAPI(request):
-    """
-    Add multiple students from an Excel file.
-    """
-    serializer = ExcelFileUploadSerializer(data=request.data)
-    if serializer.is_valid():
-        excel_file = serializer.validated_data["file"]
+    mongo = MongoDriver()
+    files = request.FILES.getlist("file")  
+    dept = request.data.get("department")
+    course = request.data.get("course")
+    branch = request.data.get("branch")
+    year = request.data.get("year")
+    total_sections = request.data.get("total_sections")
 
+    if not files:
+        return Response({"error": "No files uploaded"}, status=400)
+
+    try:
+        total_sections = int(total_sections)
+        if total_sections <= 0:
+            raise ValueError("Total sections must be a positive integer.")
+    except ValueError:
+        return Response({"error": "Invalid total_sections value"}, status=400)
+
+    all_students = []
+    for file in files:
         try:
-            data = pd.read_excel(excel_file).fillna("")
+            data = pd.read_excel(file).fillna("")
             data.columns = data.columns.str.lower()
-
             if data.empty:
-                return Response({"error": "Uploaded file is empty"}, status=400)
-
+                continue
             students_list = data.to_dict(orient="records")
-
-            processed_students = StudentScorer(
-                students_list
-            ).entry_point_for_section_divide()
-
-            failed_rows = []
-            required_fields = [
-                "student_name",
-                "student_id",
-                "department",
-                "course",
-                "branch",
-                "semester",
-            ]
-
-            for index, row in enumerate(processed_students):
-                missing_fields = [
-                    field for field in required_fields if not row.get(field)
-                ]
-                if missing_fields:
-                    failed_rows.append(
-                        {
-                            "row": index + 1,
-                            "error": f"Missing fields: {', '.join(missing_fields)}",
-                        }
-                    )
-                    continue
-
-                student_data = {
-                    "student_name": row.get("student_name"),
-                    "student_id": row.get("student_id"),
-                    "is_hosteller": row.get("is_hosteller"),
-                    "location": row.get("location"),
-                    "department": row.get("department"),
-                    "course": row.get("course"),
-                    "branch": row.get("branch"),
-                    "semester": row.get("semester"),
-                    "section": row.get("section"),
-                    "cgpa": row.get("cgpa"),
-                }
-
-                result = addStudent(**student_data)
-
-                if result["status"] != "success":
-                    failed_rows.append({"row": index + 1, "error": result["message"]})
-
-            if failed_rows:
-                # print(f"Some students could not be added: {failed_rows}")
-                return Response(
-                    {
-                        "message": "Some students could not be added",
-                        "errors": failed_rows,
-                    },
-                    status=400,
-                )
-
-            return Response({"message": "All students added successfully"}, status=200)
-
+            all_students.extend(students_list)
         except Exception as e:
-            print(f"Error processing Excel file: {str(e)}")
-            return Response({"error": str(e)}, status=400)
+            return Response({"error": f"Error processing {file.name}: {str(e)}"}, status=400)
 
-    return Response(serializer.errors, status=400)
+    total_students = len(all_students)
+    if total_students == 0:
+        return Response({"error": "No students found in uploaded files"}, status=400)
+
+    class_strength = total_students // total_sections
+    extra_students = total_students % total_sections  
+
+    scorer = StudentScorer()
+    students_with_scores = scorer.assign_scores_to_students(all_students)
+    students_with_scores.sort(key=lambda x: x["score"], reverse=True)
+    
+    def get_section_label(index):
+        letters = string.ascii_uppercase
+        if index < 26:
+            return letters[index]
+        else:
+            return letters[(index // 26) - 1] + letters[index % 26]
+    
+    section_labels = [get_section_label(i) for i in range(total_sections)]
+    sections = {label: [] for label in section_labels}
+    student_index = 0
+    
+    for section in section_labels:
+        while len(sections[section]) < class_strength and student_index < total_students:
+            sections[section].append(students_with_scores[student_index])
+            student_index += 1
+    
+    for i in range(extra_students):
+        sections[section_labels[i]].append(students_with_scores[student_index])
+        student_index += 1
+
+    if "student_distribution" not in mongo.list_collections():
+        mongo.db.create_collection("student_distribution")
+    mongo.delete_many("student_distribution", {"course": course, "department": dept, "branch": branch, "year": year})
+    student_distribution = {
+        "course": course,
+        "department": dept,
+        "branch": branch,
+        "year": year,
+        "sections": []
+    }
+
+    for section, students in sections.items():
+        student_distribution["sections"].append({
+            "section": section,
+            "strength": len(students),
+            "students": students
+        })
+
+    inserted = mongo.insert_one("student_distribution", student_distribution)
+    
+    if "section" not in mongo.list_collections():
+        mongo.db.create_collection("section")
+    mongo.delete_many("section", {"course": course, "department": dept, "branch": branch, "year": year})
+    section_structure = {
+        "course": course,
+        "department": dept,
+        "branch": branch,
+        "year": year,
+        "total_sections": total_sections,
+        "sections": [{"section": sec["section"], "strength": sec["strength"]} for sec in student_distribution["sections"]]
+    }
+    
+    mongo.insert_one("section", section_structure)
+
+    return Response({
+        "message": "Students processed successfully"
+    }, status=200)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def listSections(request):
+    course = request.query_params.get("course")
+    department = request.query_params.get("department")
+    branch = request.query_params.get("branch")
+    year = request.query_params.get("year")
+
+    if not all([course, department, branch, year]):
+        return Response({"error": "Missing required parameters (course, department, branch, year)"}, status=400)
+
+    mongo = MongoDriver()
+
+    query = {
+        "course": course,
+        "department": department,
+        "branch": branch,
+        "year": year
+    }
+    sections_cursor = mongo.find("student_distribution", query)
+
+    sections = []
+
+   
+    for record in sections_cursor:
+        for section in record["sections"]:
+            sections.append({
+                "mongo_id": str(record["_id"]),  
+                "section": section["section"], 
+            })
+
+    # Check if no sections were found
+    if not sections:
+        return Response({"error": "No sections found for the specified filters"}, status=404)
+
+    return Response({"sections": sections}, status=200)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def downloadSections(request, mongo_id):
+    mongo = MongoDriver()
+
+    try:
+        object_id = ObjectId(mongo_id)  
+    except Exception:
+        return Response({"error": "Invalid Mongo ID"}, status=400)
+
+    section_cursor = mongo.find("student_distribution", {"sections._id": object_id}).limit(1)
+    section_list = list(section_cursor)
+
+    if not section_list:
+        return Response({"error": "Section not found for the given Mongo ID"}, status=404)
+
+    section_data = section_list[0]
+    section_to_download = None
+
+    for section in section_data["sections"]:
+        if section["_id"] == object_id: 
+            section_to_download = section
+            break
+
+    if not section_to_download:
+        return Response({"error": "Section not found in the specified record"}, status=404)
+
+    df = pd.DataFrame(section_to_download["students"])
+    csv_buffer = io.StringIO()
+    df.to_csv(csv_buffer, index=False)
+
+    
+    filename = f"{section_data['course']}_{section_data['department']}_{section_data['branch']}_{section_data['year']}_Section{section_to_download['section']}.csv"
+    response = HttpResponse(csv_buffer.getvalue(), content_type="text/csv")
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+
+    return response
+
 
 
 @csrf_exempt

@@ -96,6 +96,15 @@ class MongoDriver:
         """List all collection names in the database."""
         return self.db.list_collection_names()
 
+    def save_file(self, filename, file_data):
+        file_id = self.fs.put(file_data, filename=filename, content_type="application/zip")
+        return str(file_id)
+
+    def get_file(self, file_id):
+        return self.fs.get(file_id)
+
+    def delete_file(self, file_id):
+        self.fs.delete(file_id)
     def close(self):
         """Close the MongoDB client connection."""
         if self.client:

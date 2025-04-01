@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshVie
 
 from .logics.login import login
 from .logics.rooms import get_rooms, add_room, update_room, delete_room
-from .logics.students import add_student_API
+from .logics.students import addStudentAPI,listSections,downloadSections
 from .logics.subjects import get_all_subjects, get_filtered_subjects, add_subject, update_subject, delete_subject
 from .logics.teachers import get_specific_teacher, get_all_teachers, add_teacher, update_teacher, delete_teacher, update_password
 from .logics.hod import get_pending_requests, approve_subject_requests, get_approved_subjects
@@ -75,11 +75,18 @@ urlpatterns = [
 
 
     # CSV and Student APIs
+    path("timetable/manual/upload", manual_timetable_upload, name="manualTimeTableUpload"),
     path("addStudentAPI/", add_student_API, name="addStudentAPI"),
-    path("timetable/manual/upload/", manual_timetable_upload, name="manualTimeTableUpload"),
+
 
 
     # Documentation
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-ui"),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="redoc-ui")
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="redoc-ui"),
+
+    
+    # Student APIs
+    path("addStudentAPI/", addStudentAPI, name="addStudentAPI"),
+    path("listSections/", listSections, name="listSections"),
+    path("downloadSections/<str:mongo_id>/<str:section_label>/", downloadSections, name="downloadSections"),
 ]
