@@ -1,44 +1,17 @@
 from django.urls import path
 from drf_yasg import openapi
-<<<<<<< HEAD
-from .views import (
-    login,
-    getSpecificTeacher,
-    mongo_status,
-    postgres_status,
-    getRooms,
-    addRoom,
-    updateRoom,
-    deleteRoom,
-    getTeachers,
-    addTeacher,
-    updateTeacher,
-    deleteTeacher,
-    getAllSubjects,
-    getFilteredSubjects,
-    addSubject,
-    updateSubject,
-    deleteSubject,
-    generate_timetable,
-    addStudentAPI,
-    detectConflicts,
-    downloadSections,
-    listSections,
-)
-=======
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
 from .logics.login import login
 from .logics.rooms import get_rooms, add_room, update_room, delete_room
-from .logics.students import add_student_API
+from .logics.students import addStudentAPI,listSections,downloadSections
 from .logics.subjects import get_all_subjects, get_filtered_subjects, add_subject, update_subject, delete_subject
 from .logics.teachers import get_specific_teacher, get_teachers, add_teacher, update_teacher, delete_teacher, update_password
 from .logics.hod import get_pending_requests, approve_subject_requests, get_approved_subjects
 from .logics.timetable import generate_timetable, detect_conflicts, manual_timetable_upload
 
->>>>>>> 6c3edb1851c0c1df6a778f73564eaf0a35ac8e5c
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -61,40 +34,6 @@ urlpatterns = [
     # JWT Authentication
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-<<<<<<< HEAD
-    # room's apis
-    path("getRooms/", getRooms, name="get-rooms"),
-    path("addRoom/", addRoom, name="add-room"),
-    path("updateRoom/<int:pk>/", updateRoom, name="update-room"),
-    path("deleteRoom/<int:pk>/", deleteRoom, name="delete-room"),
-    # teacher's apis
-    path("getSpecificTeacher/", getSpecificTeacher, name="get-Specific-Teacher"),
-    path("getTeachers/", getTeachers, name="get-Teachers"),
-    path("addTeacher/", addTeacher, name="add-Teacher"),
-    path("updateTeacher/<int:pk>/", updateTeacher, name="update-Teacher"),
-    path("deleteTeacher/<int:pk>/", deleteTeacher, name="delete-Teacher"),
-    # subject's apis
-    path("getAllSubjects/", getAllSubjects, name="get-all-subjects"),
-    path(
-        "getFilteredSubjects/filter", getFilteredSubjects, name="get-filtered-subjects"
-    ),
-    path("addSubject/", addSubject, name="add-subject"),
-    path("updateSubject/<int:pk>/", updateSubject, name="update-subject"),
-    path("deleteSubject/<int:pk>/", deleteSubject, name="delete-subject"),
-    # generate timetable api
-    path("generateTimetable/", generate_timetable, name="generate-timetable"),
-    # detect conflicts
-    path("detectConflicts/", detectConflicts, name="detect-conflicts"),
-    # swagger
-    path(
-        "swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-ui"
-    ),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="redoc-ui"),
-    # csv to chromosome
-    path("addStudentAPI/", addStudentAPI, name="addStudentAPI"),
-    path('download/<str:mongo_id>/<str:section_label>/', downloadSections, name="download_sections"),
-    path("listSections/",listSections,name="listSections"),
-=======
 
 
     # Room APIs
@@ -136,12 +75,16 @@ urlpatterns = [
 
 
     # CSV and Student APIs
-    path("addStudentAPI/", add_student_API, name="addStudentAPI"),
     path("timetable/manual/upload", manual_timetable_upload, name="manualTimeTableUpload"),
 
 
     # Documentation
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-ui"),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="redoc-ui")
->>>>>>> 6c3edb1851c0c1df6a778f73564eaf0a35ac8e5c
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="redoc-ui"),
+
+    
+    # Student APIs
+    path("addStudentAPI/", addStudentAPI, name="addStudentAPI"),
+    path("listSections/", listSections, name="listSections"),
+    path("downloadSections/<str:mongo_id>/<str:section_label>/", downloadSections, name="downloadSections"),
 ]

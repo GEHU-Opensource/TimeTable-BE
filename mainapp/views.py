@@ -811,9 +811,6 @@ def addStudent(
     cgpa,
 ):
     try:
-<<<<<<< HEAD
-        return {"status": "success", "message": "Student processing handled by MongoDB"}
-=======
         student, created = Student.objects.get_or_create(
             student_id=student_id,
             defaults={
@@ -839,7 +836,6 @@ def addStudent(
                 "status": "error",
                 "message": f"Student ID {student_id} already exists.",
             }
->>>>>>> 6c3edb1851c0c1df6a778f73564eaf0a35ac8e5c
     except Exception as e:
         print(f"Error adding student {student_id}: {str(e)}") 
         return {"status": "error", "message": str(e)}
@@ -873,68 +869,7 @@ def addStudentAPI(request):
             if data.empty:
                 continue
             students_list = data.to_dict(orient="records")
-<<<<<<< HEAD
             all_students.extend(students_list)
-=======
-
-            processed_students = StudentScorer(
-                students_list
-            ).entry_point_for_section_divide()
-
-            failed_rows = []
-            required_fields = [
-                "student_name",
-                "student_id",
-                "department",
-                "course",
-                "branch",
-                "semester",
-            ]
-
-            for index, row in enumerate(processed_students):
-                missing_fields = [
-                    field for field in required_fields if not row.get(field)
-                ]
-                if missing_fields:
-                    failed_rows.append(
-                        {
-                            "row": index + 1,
-                            "error": f"Missing fields: {', '.join(missing_fields)}",
-                        }
-                    )
-                    continue
-
-                student_data = {
-                    "student_name": row.get("student_name"),
-                    "student_id": row.get("student_id"),
-                    "is_hosteller": row.get("is_hosteller"),
-                    "location": row.get("location"),
-                    "department": row.get("department"),
-                    "course": row.get("course"),
-                    "branch": row.get("branch"),
-                    "semester": row.get("semester"),
-                    "section": row.get("section"),
-                    "cgpa": row.get("cgpa"),
-                }
-
-                result = addStudent(**student_data)
-
-                if result["status"] != "success":
-                    failed_rows.append({"row": index + 1, "error": result["message"]})
-
-            if failed_rows:
-                # print(f"Some students could not be added: {failed_rows}")
-                return Response(
-                    {
-                        "message": "Some students could not be added",
-                        "errors": failed_rows,
-                    },
-                    status=400,
-                )
-
-            return Response({"message": "All students added successfully"}, status=200)
-
->>>>>>> 6c3edb1851c0c1df6a778f73564eaf0a35ac8e5c
         except Exception as e:
             return Response({"error": f"Error processing {file.name}: {str(e)}"}, status=400)
 
@@ -1007,58 +942,78 @@ def addStudentAPI(request):
         "message": "Students processed successfully"
     }, status=200)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def listSections(request):
+    course = request.query_params.get("course")
+    department = request.query_params.get("department")
+    branch = request.query_params.get("branch")
+    year = request.query_params.get("year")
+
+    if not all([course, department, branch, year]):
+        return Response({"error": "Missing required parameters (course, department, branch, year)"}, status=400)
+
     mongo = MongoDriver()
-    sections_cursor = mongo.find("student_distribution", {})
+
+    query = {
+        "course": course,
+        "department": department,
+        "branch": branch,
+        "year": year
+    }
+    sections_cursor = mongo.find("student_distribution", query)
+
     sections = []
 
+   
     for record in sections_cursor:
         for section in record["sections"]:
             sections.append({
-                "mongo_id": str(record["_id"]),
-                "course": record["course"],
-                "department": record["department"],
-                "branch": record["branch"],
-                "year": record["year"],
-                "section": section["section"]
+                "mongo_id": str(record["_id"]),  
+                "section": section["section"], 
             })
+
+    # Check if no sections were found
+    if not sections:
+        return Response({"error": "No sections found for the specified filters"}, status=404)
 
     return Response({"sections": sections}, status=200)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def downloadSections(request, mongo_id, section_label):
+def downloadSections(request, mongo_id):
     mongo = MongoDriver()
 
     try:
         object_id = ObjectId(mongo_id)  
     except Exception:
-        return Response({"error": "Invalid section ID"}, status=400)
+        return Response({"error": "Invalid Mongo ID"}, status=400)
 
-    section_cursor = mongo.find("student_distribution", {"_id": object_id}).limit(1)
+    section_cursor = mongo.find("student_distribution", {"sections._id": object_id}).limit(1)
     section_list = list(section_cursor)
 
     if not section_list:
-        return Response({"error": "Section not found"}, status=404)
+        return Response({"error": "Section not found for the given Mongo ID"}, status=404)
 
     section_data = section_list[0]
-
     section_to_download = None
+
     for section in section_data["sections"]:
-        if section["section"] == section_label:
+        if section["_id"] == object_id: 
             section_to_download = section
             break
 
     if not section_to_download:
-        return Response({"error": "Section not found"}, status=404)
+        return Response({"error": "Section not found in the specified record"}, status=404)
 
     df = pd.DataFrame(section_to_download["students"])
     csv_buffer = io.StringIO()
     df.to_csv(csv_buffer, index=False)
 
-    filename = f"{section_data['course']}_{section_data['department']}_{section_data['branch']}_{section_data['year']}_Sec{section_label}.csv"
+    
+    filename = f"{section_data['course']}_{section_data['department']}_{section_data['branch']}_{section_data['year']}_Section{section_to_download['section']}.csv"
     response = HttpResponse(csv_buffer.getvalue(), content_type="text/csv")
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
 
