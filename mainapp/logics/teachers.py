@@ -9,6 +9,8 @@ from mainapp.serializers import TeacherSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from .emails import send_email_async
+from datetime import datetime
+
 
 class TimetableSerializer(serializers.Serializer):
     course_id = serializers.CharField(max_length=100)
@@ -33,9 +35,9 @@ def get_specific_teacher(request):
 
     subject_codes = TeacherSubject.get_teacher_subjects(teacher.teacher_code)
 
-    subject_names = list(
-        Subject.objects.filter(subject_code__in=subject_codes).values_list(
-            "subject_name", flat=True
+    assigned_subjects = list(
+        Subject.objects.filter(subject_code__in=subject_codes).values(
+            "subject_code", "subject_name"
         )
     )
 
@@ -50,7 +52,7 @@ def get_specific_teacher(request):
             "department": teacher.department,
             "designation": teacher.designation,
             "working_days": teacher.working_days,
-            "assigned_subjects": subject_names,
+            "assigned_subjects": assigned_subjects,
         },
         status=200,
     )
@@ -58,13 +60,38 @@ def get_specific_teacher(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_teachers(request):
+def get_all_teachers(request):
     """
-    Retrieve a list of all teachers along with their preferred subjects.
+    Retrieve the details of all teachers.
     """
     teachers = Teacher.objects.all()
-    serializer = TeacherSerializer(teachers, many=True)
-    return Response(serializer.data, status=200)
+
+    teacher_list = []
+    for teacher in teachers:
+        user = teacher.user
+        subject_codes = TeacherSubject.get_teacher_subjects(teacher.teacher_code)
+        assigned_subjects = list(
+            Subject.objects.filter(subject_code__in=subject_codes).values(
+                "subject_code", "subject_name"
+            )
+        )
+
+        teacher_list.append(
+            {
+                "id": teacher.id,
+                "name": user.get_full_name(),
+                "email": user.email,
+                "teacher_code": teacher.teacher_code,
+                "teacher_type": teacher.teacher_type,
+                "phone": teacher.phone,
+                "department": teacher.department,
+                "designation": teacher.designation,
+                "working_days": teacher.working_days,
+                "assigned_subjects": assigned_subjects,
+            }
+        )
+
+    return Response(teacher_list, status=200)
 
 
 @api_view(["POST"])
@@ -132,6 +159,7 @@ def add_teacher(request):
         "teacher_code": teacher_code,
         "email": email,
         "password": raw_password,
+        "current_year": datetime.now().year,
     }
 
     # Send email asynchronously using threading
@@ -165,9 +193,9 @@ def update_teacher(request, pk):
 
             subject_codes = TeacherSubject.get_teacher_subjects(teacher.teacher_code)
 
-            subject_names = list(
-                Subject.objects.filter(subject_code__in=subject_codes).values_list(
-                    "subject_name", flat=True
+            assigned_subjects = list(
+                Subject.objects.filter(subject_code__in=subject_codes).values(
+                    "subject_code", "subject_name"
                 )
             )
 
@@ -181,7 +209,7 @@ def update_teacher(request, pk):
                     "department": teacher.department,
                     "designation": teacher.designation,
                     "working_days": teacher.working_days,
-                    "assigned_subjects": subject_names,
+                    "assigned_subjects": assigned_subjects,
                 },
                 status=200,
             )

@@ -1,40 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Subject Approval Notification</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subject Approval Notification - GEHU</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f7fa;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        padding: 20px;
+        text-align: center;
+      }
+
+      .logo {
+        max-width: 100px;
+        height: auto;
+      }
+
+      .content {
+        padding: 0px 30px 30px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        font-size: 24px;
+        margin-top: 0;
+      }
+
+      p {
+        margin-bottom: 16px;
+      }
+
+      .approval-section {
+        margin: 25px 0;
+        padding: 0;
+      }
+
+      .approved-section {
+        border-left: 4px solid #2ecc71;
+        background-color: #e8f8f0;
+        padding: 15px;
+      }
+
+      .rejected-section {
+        border-left: 4px solid #e74c3c;
+        background-color: #fdedec;
+        padding: 15px;
+      }
+
+      .neutral-section {
+        border-left: 4px solid #3498db;
+        background-color: #e8f4fc;
+        padding: 15px;
+      }
+
+      .approval-section h2 {
+        font-size: 18px;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      .approval-section ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .approval-section li {
+        margin-bottom: 5px;
+      }
+
+      .footer {
+        background-color: rgba(234, 237, 244, 0.5);
+        background-size: cover;
+        background-position: center;
+        padding: 20px;
+        text-align: center;
+        color: #000;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .footer p {
+        margin: 8px 0;
+      }
+
+      .footer a {
+        color: #000;
+        text-decoration: underline;
+      }
+
+      .footer strong {
+        font-weight: 700;
+      }
+
+      .signature {
+        margin-top: 25px;
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .logo {
+          max-width: 30px;
+        }
+
+        .content {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 20px;
+        }
+
+        .approval-section {
+          padding: 12px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <p>Dear {{ teacher_name }},</p>
+    <div class="email-container">
+      <div class="header">
+        <img
+          src="https://i.imgur.com/kPLQZRs.png"
+          alt="GEHU Logo"
+          class="logo"
+        />
+      </div>
 
-    <p>We have processed your subject preferences. Below are the results:</p>
+      <div class="content">
+        <h1>Subject Preference Approval Results</h1>
 
-    {% if approved_subjects %}
-    <p><strong>Approved Subjects:</strong></p>
-    <ul>
-      {% for subject in approved_subjects %}
-      <li>{{ subject }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %} {% if rejected_subjects %}
-    <p><strong>Rejected Subjects:</strong></p>
-    <ul>
-      {% for subject in rejected_subjects %}
-      <li>{{ subject }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %} {% if not approved_subjects and not rejected_subjects %}
-    <p>No subject preferences were processed.</p>
-    {% elif approved_subjects and not rejected_subjects %}
-    <p>All your preferred subjects were approved!</p>
-    {% endif %}
+        <p>Dear {{ teacher_name }},</p>
 
-    <p>
-      If you have any questions or concerns, please feel free to contact the
-      HOD.
-    </p>
+        <p>
+          We have completed the review of your subject preferences. Below are
+          the results:
+        </p>
 
-    <p>Best Regards,</p>
-    <p>HOD, {{ department_name }}</p>
-    <p>{{ hod_name }}</p>
+        <div class="approval-section">
+          {% if approved_subjects %}
+          <div class="approved-section">
+            <h2>✅ Approved Subjects</h2>
+            <ul>
+              {% for subject in approved_subjects %}
+              <li>{{ subject }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %} {% if rejected_subjects %}
+          <div class="rejected-section">
+            <h2>❌ Rejected Subjects</h2>
+            <ul>
+              {% for subject in rejected_subjects %}
+              <li>{{ subject }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %} {% if not approved_subjects and not rejected_subjects %}
+          <div class="neutral-section">
+            <p>No subject preferences were processed.</p>
+          </div>
+          {% elif approved_subjects and not rejected_subjects %}
+          <div class="approved-section">
+            <p>
+              🎉 Congratulations! All your preferred subjects were approved!
+            </p>
+          </div>
+          {% endif %}
+        </div>
+
+        <p>
+          If you have any questions or concerns about these approvals, please
+          contact: <a href="mailto:{{hod_mail}}">{{hod_mail}}</a>
+        </p>
+
+        <div class="signature">
+          <p>Best Regards,</p>
+          <p><strong>HOD, {{ department_name }}</strong></p>
+          <p>{{ hod_name }}</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p><strong>Graphic Era Hill University, Bhimtal</strong></p>
+        <p>
+          <a href="mailto:timetablegehu@gmail.com">timetablegehu@gmail.com</a>
+        </p>
+        <p>&copy; {{ current_year }} GEHU. All rights reserved.</p>
+      </div>
+    </div>
   </body>
 </html>
