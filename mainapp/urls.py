@@ -76,7 +76,7 @@ urlpatterns = [
 
     # CSV and Student APIs
     path("timetable/manual/upload", manual_timetable_upload, name="manualTimeTableUpload"),
-    path("addStudentAPI/", add_student_API, name="addStudentAPI"),
+   
 
 
 
@@ -88,5 +88,5 @@ urlpatterns = [
     # Student APIs
     path("addStudentAPI/", addStudentAPI, name="addStudentAPI"),
     path("listSections/", listSections, name="listSections"),
-    path("downloadSections/<str:mongo_id>/<str:section_label>/", downloadSections, name="downloadSections"),
+    path("downloadSections/<str:mongo_id>/", downloadSections, name="downloadSections"),
 ]

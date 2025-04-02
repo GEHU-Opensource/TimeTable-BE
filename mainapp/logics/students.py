@@ -196,7 +196,7 @@ def listSections(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def downloadSections(request, mongo_id, section_label=None):
+def downloadSections(request, mongo_id):
     mongo = MongoDriver()
 
     try:
@@ -209,31 +209,28 @@ def downloadSections(request, mongo_id, section_label=None):
     if not section_cursor:
         return Response({"error": "No record found for the given Mongo ID"}, status=404)
 
-    if section_label:
-        section_to_download = next(
-            (section for section in section_cursor["sections"] if section["section"] == section_label),
-            None
-        )
+    excel_buffer = io.BytesIO()
+    writer = pd.ExcelWriter(excel_buffer, engine="openpyxl")
 
-        if not section_to_download:
-            return Response({"error": "Section not found in the specified record"}, status=404)
+    for section in section_cursor["sections"]:
+        section_label = section["section"]
+        students = section["students"]
 
-        students_data = section_to_download["students"]
-        filename = f"{section_cursor['course']}_{section_cursor['department']}_{section_cursor['branch']}_{section_cursor['year']}_Section{section_label}.csv"
-    else:
-        students_data = []
-        for sec in section_cursor["sections"]:
-            for student in sec["students"]:
-                student["section"] = sec["section"]
-                students_data.append(student)
+        if not students:
+            continue
 
-        filename = f"{section_cursor['course']}_{section_cursor['department']}_{section_cursor['branch']}_{section_cursor['year']}_All_Sections.csv"
+        df = pd.DataFrame(students)
+        sheet_name = f"Section {section_label}"[:31]  # Excel sheet names have a 31-character limit
+        df.to_excel(writer, index=False, sheet_name=sheet_name)
 
-    df = pd.DataFrame(students_data)
-    csv_buffer = io.StringIO()
-    df.to_csv(csv_buffer, index=False)
+    writer.close()
+    excel_buffer.seek(0)
 
-    response = HttpResponse(csv_buffer.getvalue(), content_type="text/csv")
+    filename = f"{section_cursor['course']}_{section_cursor['department']}_{section_cursor['branch']}_{section_cursor['year']}_Sections.xlsx"
+
+    response = HttpResponse(excel_buffer.getvalue(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
 
-    return response
+    return Response({
+        "message": "Section allocated successfully"
+    }, status=200)
