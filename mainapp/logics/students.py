@@ -231,4 +231,6 @@ def downloadSections(request, mongo_id):
     response = HttpResponse(excel_buffer.getvalue(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     response["Content-Disposition"] = f'attachment; filename="{filename}"'
 
-    return response
+    return Response({
+        "message": "Section allocated successfully"
+    }, status=200)
