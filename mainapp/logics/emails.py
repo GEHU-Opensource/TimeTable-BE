@@ -4,7 +4,7 @@ from django.utils.html import strip_tags
 import threading
 import requests
 from django.conf import settings
-from premailer import transform
+# from premailer import transform
 
 SLACK_WEBHOOK_URL = settings.SLACK_WEBHOOK_URL
 
