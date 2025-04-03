@@ -3,6 +3,8 @@ import io
 import json
 import os
 from datetime import datetime
+from openpyxl import Workbook
+
 
 def csv_to_json(file):
     file.seek(0)  # Ensure the file pointer is at the beginning
@@ -99,32 +101,6 @@ def teacher_json_to_csv(teacher_timetable, output_folder, time_slots):
             writer.writerow(header)
             writer.writerows(rows)
 
-if __name__ == "__main__":
-    # Load teacher timetable from samples/teacher.json
-    json_file = os.path.join(os.path.dirname(__file__), "samples", "teacher.json")  # Fixed path
-
-    if not os.path.exists(json_file):
-        print(f"Error: {json_file} not found!")
-    else:
-        with open(json_file, "r", encoding="utf-8") as file:
-            teacher_tt = json.load(file)
-
-        # Define time slots mapping
-        time_slots = {
-            1: "08:00 - 09:00",
-            2: "09:00 - 10:00",
-            3: "11:00 - 12:00",
-            4: "12:00 - 13:00",
-            5: "16:50 - 17:50",
-        }
-
-        # Convert JSON timetable to CSVs inside samples/tt_csvs
-        output_folder = os.path.join(os.path.dirname(__file__), "samples", "teacher_tt_csvs")
-        os.makedirs(output_folder, exist_ok=True)  # Ensure folder exists
-
-        teacher_json_to_csv(teacher_tt, output_folder, time_slots)
-        print(f"Teacher CSV files have been saved in '{output_folder}'.")
-
 
 def extract_time_slots_for_classroom(timetable, time_slot_order):
     """Extract and sort time slots from the timetable based on a predefined order."""
@@ -137,7 +113,7 @@ def extract_time_slots_for_classroom(timetable, time_slot_order):
                 if isinstance(entry, dict) and "time_slot" in entry:
                     unique_slots.add(entry["time_slot"])
                 else:
-                    print(f"⚠️ ERROR: Unexpected entry format -> {entry}")
+                    print(f"ERROR: Unexpected entry format -> {entry}")
 
     sorted_slots = sorted(unique_slots, key=lambda slot: time_slot_order.get(slot, float('inf')))
     
@@ -175,36 +151,6 @@ def classroom_json_to_csv(classroom_timetable, output_folder, time_slots):
             writer.writerow(header)
             writer.writerows(rows)  
 
-# if __name__ == "__main__":
-    
-#     """Main function to load timetable and generate CSVs."""
-#     json_file = os.path.join(os.path.dirname(__file__), "samples", "class.json")  # ✅ Fixed path
-
-#     if not os.path.exists(json_file):
-#         print(f"❌ Error: {json_file} not found!")
-
-#     with open(json_file, "r", encoding="utf-8") as file:
-#         classroom_tt = json.load(file)
-
-#     # Define time slots mapping (Modify as needed)
-#     time_slots = {
-#         1: "08:00 - 09:00",
-#         2: "09:00 - 10:00",
-#         3: "11:00 - 12:00",
-#         4: "12:00 - 13:00",
-#         5: "16:50 - 17:50",
-#     }
-
-#     # Output folder for CSV files
-#     output_folder = os.path.join(os.path.dirname(__file__), "samples", "class_csvs")
-#     os.makedirs(output_folder, exist_ok=True)  # Ensure folder exists
-
-#     # Convert JSON timetable to CSV
-#     classroom_json_to_csv(classroom_tt, output_folder, time_slots)
-
-#     print(f"✅ Classroom CSV files have been saved in '{output_folder}'.")
-    
-# Predefined time slots mapping
 
 def parse_time(time_slot):
     """Extract start and end times from a time slot string."""
@@ -308,31 +254,28 @@ def json_to_csv(input_folder, json_filename, output_folder,time_slots):
 
         print(f"CSV file '{csv_file}' has been created successfully!")
 
-# if __name__ == "__main__":
-#     input_folder = os.path.join(os.path.dirname(__file__), "samples")  # ✅ Fixed path
-#     json_filename = "tt.json"
-#     json_file = os.path.join(input_folder, json_filename)
 
-#     if not os.path.exists(json_file):
-#         print(f"❌ Error: {json_file} not found!")
-#     else:
-#         with open(json_file, "r", encoding="utf-8") as file:
-#             tt = json.load(file)
+def merge_section_csvs_to_excel(department, course_id, total_sections, output_dir="static/csvs"):
+    wb = Workbook()
+    first = True
 
-#         output_folder = os.path.join(os.path.dirname(__file__), "samples", "timetable_csvs")
-#         os.makedirs(output_folder, exist_ok=True)  # Ensure folder exists
+    for sec in total_sections:
+        file_name = f"{department}-{course_id}-{sec}.csv"
+        file_path = os.path.join(output_dir, file_name)
 
-#         time_slots = {
-#             1: "9:00 - 9:55",
-#             2: "9:55 - 10:50",  # Fixed spacing
-#             3: "11:10 - 12:05",  # Fixed spacing
-#             4: "12:05 - 1:00",  # Fixed spacing
-#             5: "1:20 - 2:15",  # Fixed spacing
-#             6: "2:15 - 3:10",  # Fixed spacing
-#             7: "3:30 - 4:25"  # Fixed spacing
-#         }
+        if os.path.exists(file_path):
+            sheet_name = f"Section-{sec}"
+            ws = wb.active if first else wb.create_sheet(title=sheet_name)
+            if first:
+                ws.title = sheet_name
+                first = False
 
-#         json_to_csv(input_folder, json_filename, output_folder, time_slots)
-        
-        
-        
+            with open(file_path, newline='') as csvfile:
+                reader = csv.reader(csvfile)
+                for row in reader:
+                    ws.append(row)
+
+    merged_file_name = f"{department}-{course_id}-merged.xlsx"
+    merged_path = os.path.join(output_dir, merged_file_name)
+    wb.save(merged_path)
+    return merged_file_name

@@ -76,7 +76,7 @@ urlpatterns = [
 
     # CSV and Student APIs
     path("timetable/manual/upload", manual_timetable_upload, name="manualTimeTableUpload"),
-   
+    path("addStudentAPI/", addStudentAPI, name="addStudentAPI"),
 
 
 

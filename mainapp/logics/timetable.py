@@ -21,8 +21,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 
-from mainapp.converter.converter import csv_to_json
-
+from mainapp.converter.converter import csv_to_json, merge_section_csvs_to_excel
+from ..models import Teacher
 
 mongo_driver = MongoDriver()
 pg_driver = PostgresDriver()
@@ -47,23 +47,67 @@ def generate_timetable_from_ga(
     day_map: dict,
     time_slot_map: dict
 ):
+    lab_matrix = {
+        "L1": [[True] * 7 for _ in range(5)],
+        "L2": [[True] * 7 for _ in range(5)],
+        "L3": [[True] * 7 for _ in range(5)],
+        "L4": [[True] * 7 for _ in range(5)],
+        "L5": [[True] * 7 for _ in range(5)],
+        "L6": [[True] * 7 for _ in range(5)],
+    }
+    from Samples.samples import (
+        SpecialSubjects,
+        SubjectTeacherMap,
+        SubjectWeeklyQuota,
+        TeacherWorkload,
+    )
     timetable, correct_teacher_availability_matrix, correct_lab_availability_matrix = run_timetable_generation(
-        teacher_subject_mapping=teacher_subject_mapping,
-        total_sections=total_sections,
-        total_classrooms=total_classrooms,
-        total_labs=total_labs,
-        teacher_preferences=teacher_preferences,
-        teacher_weekly_workload=teacher_weekly_workload,
-        special_subjects=special_subjects,
-        labs=labs,
-        subject_quota_limits=subject_quota_limits,
-        teacher_duty_days=teacher_duty_days,
-        teacher_availability_matrix=teacher_availability_matrix,
-        lab_availability_matrix=lab_availability_matrix,
-        total_generations=total_generations,
-        time_slots=time_slots,
-        day_map=day_map,
-        time_slot_map=time_slot_map
+        teacher_subject_mapping=SubjectTeacherMap.subject_teacher_map,
+        total_sections={"A": 70, "B": 100, "C": 75, "D": 100},
+        total_classrooms={"R1": 200, "R2": 230, "R3": 240, "R4": 250, "R5": 250},
+        total_labs={"L1": 70, "L2": 50, "L3": 70, "L4": 50, "L5": 70, "L6": 50},
+        teacher_preferences=TeacherWorkload.teacher_preferences,
+        teacher_weekly_workload=TeacherWorkload.Weekly_workLoad,
+        special_subjects=SpecialSubjects.special_subjects,
+        labs=SpecialSubjects.Labs,
+        subject_quota_limits=SubjectWeeklyQuota.subject_quota,
+        teacher_duty_days=TeacherWorkload.teacher_duty_days,
+        teacher_availability_matrix=initialize_teacher_availability(
+            TeacherWorkload.Weekly_workLoad.keys(), 5, 7
+        ),
+        lab_availability_matrix=lab_matrix,
+        total_generations=Defaults.total_no_of_generations,
+        time_slots={
+            1: "9:00 - 9:55",
+            2: "9:55 - 10:50",
+            3: "11:10 - 12:05",
+            4: "12:05 - 1:00",
+            5: "1:20 - 2:15",
+            6: "2:15 - 3:10",
+            7: "3:30 - 4:25",
+        },
+        day_map={
+            "Monday": 0,
+            "Tuesday": 1,
+            "Wednesday": 2,
+            "Thursday": 3,
+            "Friday": 4,
+            "Saturday": 5,
+            "Sunday": 6,
+        },
+        time_slot_map={
+            "9:00 - 9:55": 1,
+            "9:55 - 10:50": 2,
+            "11:10 - 12:05": 3,
+            "12:05 - 1:00": 4,
+            "1:20 - 2:15": 5,
+            "2:15 - 3:10": 6,
+            "3:30 - 4:25": 7,
+        },
+        fixed_teacher_assignment={
+            "A": {"TCS-531": "AB01", "TMA-502": "HP18"},  # section: {"subject": teacher}
+            "B": {"TCS-503": "BJ10"}
+        }
     )
 
     old_current_timetable = mongo_driver.find_one(
@@ -204,8 +248,9 @@ def generate_csv_files(timetable, department, course_id):
 @permission_classes([IsAuthenticated])
 def generate_timetable(request):
     try:
+        print("hii")
         data = request.data
-        course_id = data.get("course_id")
+        course_id = data.get("course")
         semester = data.get("semester")
         department = data.get("department")
         time_slots_from_fe = data.get("time_slots")
@@ -214,29 +259,10 @@ def generate_timetable(request):
             for k, v in time_slots_from_fe.items()
         }
 
-            # {
-            #     1: "9:00 - 9:55",
-            #     2: "9:55 - 10:50",
-            #     3: "11:10 - 12:05",
-            #     4: "12:05 - 1:00",
-            #     5: "1:20 - 2:15",
-            #     6: "2:15 - 3:10",
-            #     7: "3:30 - 4:25",
-            # }
-
-            # {
-            #     "9:00 - 9:55": 1,
-            #     "9:55 - 10:50": 2,
-            #     "11:10 - 12:05": 3,
-            #     "12:05 - 1:00": 4,
-            #     "1:20 - 2:15": 5,
-            #     "2:15 - 3:10": 6,
-            #     "3:30 - 4:25": 7
-            # }
-        if not (course_id and semester and department):
+        if not (course_id and semester and department and time_slots_from_fe):
             return Response(
                 {
-                    "error": "course_id, semester and department are required."
+                    "error": "course, semester, time_slots and department are required."
                 }
                 ,
                 status = 400
@@ -245,49 +271,73 @@ def generate_timetable(request):
         lab_availability_matrix = get_lab_availability_matrix()
         teacher_availability_matrix = get_teacher_availability_matrix(department)
         teacher_subject_mapping = get_teacher_subject_mapping()
-
         if teacher_subject_mapping is None:
-            #todo: this should not be there if DB is empty then create a new one
             return Response(
                 {
-                    "error": "Teacher subject mapping not found in Postgres."
+                    "error": "Teacher subject mapping not found, ask HOD to approve the subjects."
                 },
                 status = 400
             )
-        #todo: there will be multiple departments so we need to get the total sections for each department
-        get_section_query = "SELECT section, COUNT(*) AS section_count FROM public.mainapp_student GROUP BY section;"
-        result = pg_driver.execute_query(get_section_query)
-        total_sections = {row["section"]: row["section_count"] for row in result}
-        # total_sections = {"A": 70, "B": 100, "C": 75, "D": 100}
-        # todo: Ask gunjan the section csv.
 
-        timetable, updated_teacher_availability_matrix, updated_lab_availability_matrix = generate_timetable_from_ga(
-            lab_availability_matrix=lab_availability_matrix,
-            teacher_availability_matrix=teacher_availability_matrix,
-            course_id=course_id,
-            semester=semester,
-            teacher_subject_mapping=teacher_subject_mapping,
-            total_sections=total_sections,
-            total_classrooms={"R1": 200, "R2": 230, "R3": 240, "R4": 250, "R5": 250}, #todo: remove there constants
-            total_labs={"L1": 70, "L2": 50, "L3": 70, "L4": 50, "L5": 70, "L6": 50},
-            teacher_preferences=TeacherWorkload.teacher_preferences,
-            teacher_weekly_workload=TeacherWorkload.Weekly_workLoad,
-            special_subjects=SpecialSubjects.special_subjects,
-            labs=SpecialSubjects.Labs,
-            subject_quota_limits=SubjectWeeklyQuota.subject_quota,
-            teacher_duty_days=TeacherWorkload.teacher_duty_days,
-            total_generations=Defaults.total_no_of_generations,
-            time_slots=time_slots_from_fe,
-            day_map={
-                "Monday": 0,
-                "Tuesday": 1,
-                "Wednesday": 2,
-                "Thursday": 3,
-                "Friday": 4,
-                "Saturday": 5,
-            },
-            time_slot_map = reversed_time_slots_map
-        )
+        get_section_query = f"SELECT section, COUNT(*) AS section_count FROM public.mainapp_student WHERE semester = '{semester}' AND department = '{department}' GROUP BY section;"
+        result = pg_driver.execute_query(get_section_query)
+        total_sections = {
+            row[0]: row[1]
+            for row in result
+        }
+
+        # get the classroom data from DB
+        get_section_query = f"SELECT room_code, capacity FROM public.mainapp_room where room_type != 'Lab';"
+        result = pg_driver.execute_query(get_section_query)
+        total_classrooms = {
+            row[0]: row[1]
+            for row in result
+        }
+
+        get_section_query = f"SELECT room_code, capacity FROM public.mainapp_room where room_type = 'Lab';"
+        result = pg_driver.execute_query(get_section_query)
+        total_labs = {
+            row[0]: row[1]
+            for row in result
+        }
+
+        try:
+            timetable, updated_teacher_availability_matrix, updated_lab_availability_matrix = generate_timetable_from_ga(
+                lab_availability_matrix=lab_availability_matrix,
+                teacher_availability_matrix=teacher_availability_matrix,
+                course_id=course_id,
+                semester=semester,
+                teacher_subject_mapping=teacher_subject_mapping,
+                total_sections=total_sections,
+                total_classrooms=total_classrooms,  #{"R1": 200, "R2": 230, "R3": 240, "R4": 250, "R5": 250}
+                total_labs=total_labs,
+                total_generations=Defaults.total_no_of_generations,
+                teacher_preferences=TeacherWorkload.teacher_preferences,
+                teacher_weekly_workload=TeacherWorkload.Weekly_workLoad,
+                special_subjects=SpecialSubjects.special_subjects,
+                labs=SpecialSubjects.Labs,
+                subject_quota_limits=SubjectWeeklyQuota.subject_quota,
+                teacher_duty_days=TeacherWorkload.teacher_duty_days,
+                time_slots=time_slots_from_fe,
+                day_map={
+                    "Monday": 0,
+                    "Tuesday": 1,
+                    "Wednesday": 2,
+                    "Thursday": 3,
+                    "Friday": 4,
+                    "Saturday": 5,
+                },
+                time_slot_map = reversed_time_slots_map
+            )
+
+        except Exception as ex:
+            print("err", ex)
+            return Response(
+                {
+                    "error": "Internal server error, contact the TT team."
+                },
+                status = 400
+            )
 
         mongo_driver.update_one(
             "lab_availability_matrix",
@@ -315,20 +365,28 @@ def generate_timetable(request):
             department,
             course_id
         )
-        sections_with_links = {}
 
-        for sec, total in total_sections.items():
-            file_name = f"{department}-{course_id}-{sec}.csv"
-            download_link = request.build_absolute_uri(f"/static/csvs/{file_name}")
-            sections_with_links[sec] = {
-                "section_strength": total,
-                "download_link": download_link
+        merged_file = merge_section_csvs_to_excel(department, course_id, total_sections)
+        download_link = request.build_absolute_uri(f"/static/csvs/{merged_file}")
+
+        sections_with_links = {
+            "total": total_sections,
+            "download_link": download_link
+        }
+
+        mongo_driver.update_one(
+            "current_timetable",
+            {},
+            {
+                "$set": {
+                    "matrix": timetable
+                }
             }
-
+        )
         return Response({
-            "timetable": timetable,
-            "sections": sections_with_links
-        },
+                "timetable": timetable,
+                "sections": sections_with_links
+            },
             status=200
         )
 

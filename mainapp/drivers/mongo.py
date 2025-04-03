@@ -72,7 +72,7 @@ class MongoDriver:
     def find(self, collection_name, query):
         """Find documents in the specified collection matching the query."""
         collection = self.get_collection(collection_name)
-        print(collection)
+
         return collection.find(query)
 
     def update_one(self, collection_name, query, update, array_filters=None):
