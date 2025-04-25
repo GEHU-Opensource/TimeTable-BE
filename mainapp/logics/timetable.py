@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from mainapp.logics.teachers import TimetableSerializer
+from mainapp.serializers import TimetableSerializer
 from ..drivers.mongo import MongoDriver
 from ..drivers.postgres import PostgresDriver
 

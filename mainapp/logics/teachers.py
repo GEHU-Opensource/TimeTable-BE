@@ -12,14 +12,6 @@ from .emails import send_email_async
 from datetime import datetime
 
 
-class TimetableSerializer(serializers.Serializer):
-    course_id = serializers.CharField(max_length=100)
-    semester = serializers.IntegerField()
-    timetable = serializers.DictField()
-    chromosome = serializers.CharField(max_length=255)
-    last_updated = serializers.DateTimeField(required=False)
-    updated_at = serializers.DateTimeField(required=False)
-
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_specific_teacher(request, teacher_code=None):
@@ -143,6 +135,7 @@ def add_teacher(request):
         department=teacher_data.get("department", ""),
         designation=teacher_data.get("designation", ""),
         working_days=teacher_data.get("working_days", ""),
+        weekly_workload=teacher_data.get("weekly_workload", ""),
         teacher_code=teacher_code,
         teacher_type=teacher_data.get("teacher_type", "faculty"),
     )
@@ -212,6 +205,7 @@ def update_teacher(request, pk):
                     "name": teacher.user.get_full_name(),
                     "email": teacher.user.email,
                     "teacher_code": teacher.teacher_code,
+                    "teacher_type": teacher.teacher_type,
                     "phone": teacher.phone,
                     "department": teacher.department,
                     "designation": teacher.designation,
