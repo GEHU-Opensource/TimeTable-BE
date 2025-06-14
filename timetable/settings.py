@@ -151,6 +151,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATIC_URL = "/assets/"
 STATICFILES_DIRS = [
     BASE_DIR / "static/TimeTable-FE/assets/admin",
+    BASE_DIR / "static/TimeTable-FE/assets/styles",
+    BASE_DIR / "static/TimeTable-FE/assets/scripts",
+
     BASE_DIR / "static/TimeTable-FE/assets",
     BASE_DIR / "static/TimeTable-FE/faculty",
     BASE_DIR / "static/TimeTable-FE/hod",

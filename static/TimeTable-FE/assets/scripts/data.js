@@ -1,4 +1,7 @@
-const departments = [
+export const BE_URL = "http://127.0.0.1:8000";
+export const API_BASE = `${BE_URL}/api`;
+
+export const departments = [
     {
         name: "Computer Science Engineering",
         courses: [
@@ -1223,12 +1226,23 @@ const departments = [
 ];
 
 const generateTT = "../testing.xlsx";
-const BE_URL = "http://127.0.0.1:8000";
 
-const showLoader = () => {
-    document.getElementById('loader').style.display = 'flex';
-};
+export async function authFetch(endpoint, options = {}) {
+  const token = localStorage.getItem("access_token");
+  options.headers = {
+    ...(options.headers || {}),
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+  const res = await fetch(API_BASE + endpoint, options);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
 
-const hideLoader = () => {
-    document.getElementById('loader').style.display = 'none';
-};
+export function showLoader() {
+  document.getElementById("loader").style.display = "flex";
+}
+
+export function hideLoader() {
+  document.getElementById("loader").style.display = "none";
+}
