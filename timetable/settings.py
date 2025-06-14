@@ -9,22 +9,23 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-_z08bl^02re7fpkx-f4k%46=mcd$fczddsesh0(yk_!%x@vca3"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.43.161", "192.168.5.29", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5501",
-    "http://127.0.0.1:5500",
-    "http://192.168.43.161:5500",
-    "http://192.168.5.29:5500",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://127.0.0.1:5500",
+#     "http://192.168.43.161:5500",
+#     "http://192.168.5.29:5500",
+# ]
 
-# CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
