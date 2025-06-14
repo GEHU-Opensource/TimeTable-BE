@@ -26,7 +26,6 @@ loginForm.addEventListener("submit", async (e) => {
         });
 
         const data = await response.json();
-
         if (response.ok) {
             localStorage.setItem("access_token", data.access_token);
             localStorage.setItem("refresh_token", data.refresh_token);
@@ -68,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.clear();
     function loadComponent(id, file) {
         showLoader();
+        console.log(`Loading component: ${id} from ${file}`);
         fetch(file)
             .then(response => response.text())
             .then(data => {
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-
-    loadComponent("footer", "../components/footer.html");
+    console.log("Loading components...");
+    loadComponent("footer", "/assets/components/footer.html");
     setTimeout(highlightActiveLink, 1000);
 });

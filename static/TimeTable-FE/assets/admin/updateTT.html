@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin | Manual Update TimeTable</title>
-    <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/TimeTable-FE/assets/styles/updateTT.css" />
     <link rel="stylesheet" href="/TimeTable-FE/assets/styles/root.css">
 
@@ -18,7 +18,7 @@
             if (!accessToken || !refreshToken || !expirationTime) {
                 alert("You are not authorized! Redirecting to login.");
                 removeSessionData();
-                window.location.href = "../index.html";
+                window.location.href = "../../index.html";
                 return false;
             }
 
@@ -58,7 +58,7 @@
                 console.error("Error refreshing access token:", error);
                 alert("Session expired! Redirecting to login.");
                 removeSessionData();
-                window.location.href = "../index.html";
+                window.location.href = "../../index.html";
                 return false;
             }
         }
@@ -72,7 +72,7 @@
                     alert("Session Expired!");
                     clearInterval(sessionTimer);
                     removeSessionData();
-                    window.location.href = "../index.html";
+                    window.location.href = "../../index.html";
                 }
             }, 1000);
         }

@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin | View TimeTable</title>
-    <link rel="shortcut icon" href="/TimeTable-FE/assets/images/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="/TimeTable-FE/assets/styles/viewTT.css" />
+    <title>Admin | Subject Details</title>
+    <link rel="shortcut icon" href="/TimeTable-FE/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/TimeTable-FE/assets/styles/subject.css" />
     <link rel="stylesheet" href="/TimeTable-FE/assets/styles/root.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
         async function validateSession() {
@@ -19,7 +18,7 @@
             if (!accessToken || !refreshToken || !expirationTime) {
                 alert("You are not authorized! Redirecting to login.");
                 removeSessionData();
-                window.location.href = "../index.html";
+                window.location.href = "../../index.html";
                 return false;
             }
 
@@ -59,7 +58,7 @@
                 console.error("Error refreshing access token:", error);
                 alert("Session expired! Redirecting to login.");
                 removeSessionData();
-                window.location.href = "../index.html";
+                window.location.href = "../../index.html";
                 return false;
             }
         }
@@ -73,7 +72,7 @@
                     alert("Session Expired!");
                     clearInterval(sessionTimer);
                     removeSessionData();
-                    window.location.href = "../index.html";
+                    window.location.href = "../../index.html";
                 }
             }, 1000);
         }
@@ -97,7 +96,7 @@
 
     <main>
         <div class="form-container">
-            <h2>View TimeTable</h2>
+            <h2>Subject Details</h2>
             <form action="" id="subjectDetailsform">
                 <div class="form-group">
                     <label for="department">Department *</label>
@@ -120,7 +119,7 @@
                     </select>
                 </div>
 
-                <!-- <div class="form-group">
+                <div class="form-group">
                     <label for="year">Year *</label>
                     <select name="year" id="year" required>
                         <option value="" selected>Select Year</option>
@@ -132,28 +131,65 @@
                     <select name="semester" id="semester" required>
                         <option value="" selected>Select Semester</option>
                     </select>
-                </div> -->
+                </div>
 
                 <div class="form-group">
-                    <button type="button" id="viewTT">View TT</button>
+                    <button type="button" id="getSubjects">Get Subjects</button>
                 </div>
             </form>
         </div>
 
-        <div class="show" id="show">
-            <h1>View TimeTable</h1>
-            <label for="sheet-selector">Section:</label>
-            <select id="sheet-selector"></select>
-            <button id="download-btn">Download</button>
-            <br /><br />
-            <div id="output"></div>
+        <div class="subjectData" id="subjectData">
+            <section id="existingSubjectData">
+                <h2>Existing Subjects Data</h2>
+                <table id="subjectListTable">
+                    <thead>
+                        <tr>
+                            <th>Subject Code</th>
+                            <th>Subject Name</th>
+                            <th>Subject Credit</th>
+                            <th>Weekly Lectures</th>
+                            <th>Special Subject</th>
+                            <th>Lab</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic rows will be added here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="newSubjectData">
+                <h2>Add New Subject</h2>
+                <div class="action-section">
+                    <button id="addSubjectBtn">Add Subject</button>
+                    <button id="submitBtn">Submit</button>
+                </div>
+                <table id="newSubjectTable">
+                    <thead>
+                        <tr>
+                            <th>Subject Code</th>
+                            <th>Subject Name</th>
+                            <th>Subject Credit</th>
+                            <th>Weekly Lectures</th>
+                            <th>Special Subject</th>
+                            <th>Lab</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamic rows will be added here -->
+                    </tbody>
+                </table>
+            </section>
         </div>
     </main>
 
     <div id="footer"></div>
 
     <script src="/TimeTable-FE/assets/scripts/data.js"></script>
-    <script src="/TimeTable-FE/assets/scripts/viewTT.js"></script>
+    <script src="/TimeTable-FE/assets/scripts/subject.js"></script>
 </body>
 
 </html>

@@ -19,7 +19,7 @@
             if (!accessToken || !refreshToken || !expirationTime) {
                 alert("You are not authorized! Redirecting to login.");
                 removeSessionData();
-                window.location.href = "../index.html";
+                window.location.href = "../../index.html";
                 return false;
             }
 
@@ -59,7 +59,7 @@
                 console.error("Error refreshing access token:", error);
                 alert("Session expired! Redirecting to login.");
                 removeSessionData();
-                window.location.href = "../index.html";
+                window.location.href = "../../index.html";
                 return false;
             }
         }
@@ -73,7 +73,7 @@
                     alert("Session Expired!");
                     clearInterval(sessionTimer);
                     removeSessionData();
-                    window.location.href = "../index.html";
+                    window.location.href = "../../index.html";
                 }
             }, 1000);
         }

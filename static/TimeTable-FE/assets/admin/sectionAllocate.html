@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin | Detect Conflicts</title>
+    <title>Admin | Section Allocation</title>
     <link rel="shortcut icon" href="/TimeTable-FE/assets/images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/TimeTable-FE/assets/styles/detectConflicts.css" />
+    <link rel="stylesheet" href="/TimeTable-FE/assets/styles/sectionAllocate.css" />
     <link rel="stylesheet" href="/TimeTable-FE/assets/styles/root.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script>
         async function validateSession() {
@@ -18,7 +19,7 @@
             if (!accessToken || !refreshToken || !expirationTime) {
                 alert("You are not authorized! Redirecting to login.");
                 removeSessionData();
-                window.location.href = "../index.html";
+                window.location.href = "../../index.html";
                 return false;
             }
 
@@ -58,7 +59,7 @@
                 console.error("Error refreshing access token:", error);
                 alert("Session expired! Redirecting to login.");
                 removeSessionData();
-                window.location.href = "../index.html";
+                window.location.href = "../../index.html";
                 return false;
             }
         }
@@ -72,7 +73,7 @@
                     alert("Session Expired!");
                     clearInterval(sessionTimer);
                     removeSessionData();
-                    window.location.href = "../index.html";
+                    window.location.href = "../../index.html";
                 }
             }, 1000);
         }
@@ -94,19 +95,77 @@
 
     <div id="navbar-admin"></div>
 
-    <div class="container">
-        <h2>Detect Conflicts</h2>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" id="csvFiles" name="csv_files" multiple accept=".csv" />
-            <button type="submit">Upload & Detect</button>
-        </form>
-        <div id="response"></div>
-    </div>
+    <main>
+        <div class="form-container">
+            <h2>Allocate Sections</h2>
+            <form action="" id="subjectDetailsform">
+                <div class="form-group">
+                    <label for="department">Department *</label>
+                    <select name="department" id="department" required>
+                        <option value="" selected>Select Department</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="course">Course *</label>
+                    <select name="course" id="course" required>
+                        <option value="" selected>Select Course</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="branch">Branch *</label>
+                    <select name="branch" id="branch" required>
+                        <option value="" selected>Select Branch</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Year *</label>
+                    <select name="year" id="year" required>
+                        <option value="" selected>Select Year</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="semester">Semester *</label>
+                    <select name="semester" id="semester" required>
+                        <option value="" selected>Select Semester</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sections">Sections *</label>
+                    <input type="number" min="0" name="sections" id="sections" placeholder="No. of Sections" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tt">Student Data *</label>
+                    <div class="file-input-container">
+                        <label for="tt" class="file-label">Choose File</label>
+                        <input type="file" name="tt" id="tt" accept=".xlsx, .xls" />
+                        <span id="file-chosen">No file chosen</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" id="allocate">Allocate Sections</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="show" id="show">
+            <h1>Section Allocated</h1>
+            <button id="download-btn">Download</button>
+            <br /><br />
+            <div id="output"></div>
+        </div>
+    </main>
 
     <div id="footer"></div>
 
     <script src="/TimeTable-FE/assets/scripts/data.js"></script>
-    <script src="/TimeTable-FE/assets/scripts/detectConflicts.js"></script>
+    <script src="/TimeTable-FE/assets/scripts/sectionAllocate.js"></script>
 </body>
 
 </html>

@@ -8,7 +8,6 @@ load_dotenv()
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -85,7 +84,9 @@ ROOT_URLCONF = "timetable.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [
+            BASE_DIR / "static/TimeTable-FE",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -140,18 +141,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
-
-
-STATIC_URL = "/Users/ayush/PycharmProjects/TimeTable-BE/mainapp/templates/TimeTable-FE/"
-from icecream import ic
-ic(os.getcwd())
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'mainapp/templates/TimeTable-FE/')]
-ic(STATICFILES_DIRS)
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+STATIC_URL = "/assets/"
+STATICFILES_DIRS = [
+    BASE_DIR / "static/TimeTable-FE/assets/admin",
+    BASE_DIR / "static/TimeTable-FE/assets",
+    BASE_DIR / "static/TimeTable-FE/faculty",
+    BASE_DIR / "static/TimeTable-FE/hod",
+]
