@@ -85,7 +85,9 @@ ROOT_URLCONF = "timetable.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [
+            BASE_DIR / "static/TimeTable-FE",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -101,13 +103,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "timetable.wsgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_NAME", "timetable"),
-        "USER": os.getenv("POSTGRES_USER", "postgres"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "password"),
-        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
-        "PORT": os.getenv("POSTGRES_PORT", "5432"),
+    'default': {
+         'ENGINE': 'django.db.backends.postgresql',
+         'NAME': os.getenv("POSTGRES_NAME", "timetable"),
+         'USER': os.getenv("POSTGRES_USER", "postgres"),
+         'PASSWORD': os.getenv("POSTGRES_PASSWORD", "password"),
+         'HOST': os.getenv("POSTGRES_HOST", "localhost"),
+         'PORT': os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -140,16 +142,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
-
-
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+STATIC_URL = "/assets/"
+STATICFILES_DIRS = [
+    BASE_DIR / "static/TimeTable-FE/assets/admin",
+    BASE_DIR / "static/TimeTable-FE/assets",
+    BASE_DIR / "static/TimeTable-FE/faculty",
+    BASE_DIR / "static/TimeTable-FE/hod",
+]

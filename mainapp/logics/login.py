@@ -17,7 +17,10 @@ def index(request):
 
     try:
         from django.shortcuts import render
-        return render(request, "TimeTable-FE/index.html")
+        from icecream import ic
+        import os
+        ic(os.getcwd())
+        return render(request, "index.html", {"message": "Database is up and running!"})
 
     except Exception as e:
         return Response({"error": str(e)}, status=500)
