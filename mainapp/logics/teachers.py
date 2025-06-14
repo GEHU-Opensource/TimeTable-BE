@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from .emails import send_email_async
 from datetime import datetime
+import re
 
 
 class TimetableSerializer(serializers.Serializer):
@@ -19,6 +20,52 @@ class TimetableSerializer(serializers.Serializer):
     chromosome = serializers.CharField(max_length=255)
     last_updated = serializers.DateTimeField(required=False)
     updated_at = serializers.DateTimeField(required=False)
+
+
+def extract_teacher_name(email):
+    """
+    Extracts a teacher's name from the email address.
+    """
+    username = email.split("@")[0]
+    username = re.sub(r"\.\d+$", "", username)  # Remove trailing .digits
+    username = username.replace(".", " ")
+    return username.title()
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def invite_teachers(request):
+    """
+    Sends invitation emails to teachers with a link to fill out their details and preferred subjects.
+    """
+    emails = request.data.get("emails", [])
+
+    if not isinstance(emails, list) or not emails:
+        return Response(
+            {"error": "A non-empty list of emails is required."}, status=400
+        )
+
+    for email in emails:
+        email = email.strip().lower()
+        teacher_name = extract_teacher_name(email)
+
+        invite_link = "http://127.0.0.1:5501/faculty.html"
+
+        email_context = {
+            "teacher_name": teacher_name,
+            "invite_link": invite_link,
+            "email": email,
+            "current_year": datetime.now().year,
+        }
+
+        send_email_async(
+            subject="GEHU Invitation to add details for Academic TimeTable",
+            template_name="teacher_invite_email.html",
+            context=email_context,
+            recipient_email=email,
+        )
+
+    return Response({"message": "Invitation emails sent successfully."}, status=200)
 
 
 @api_view(["GET"])

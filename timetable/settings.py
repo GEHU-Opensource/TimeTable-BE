@@ -21,6 +21,7 @@ ALLOWED_HOSTS = ["192.168.43.161", "192.168.5.29", "127.0.0.1"]
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5501",
+    "http://127.0.0.1:5500",
     "http://192.168.43.161:5500",
     "http://192.168.5.29:5500",
 ]
@@ -101,13 +102,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "timetable.wsgi.application"
 
 DATABASES = {
-    'default': {
-         'ENGINE': 'django.db.backends.postgresql',
-         'NAME': os.getenv("POSTGRES_NAME", "timetable"),
-         'USER': os.getenv("POSTGRES_USER", "postgres"),
-         'PASSWORD': os.getenv("POSTGRES_PASSWORD", "password"),
-         'HOST': os.getenv("POSTGRES_HOST", "localhost"),
-         'PORT': os.getenv("POSTGRES_PORT", "5432"),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_NAME", "timetable"),
+        "USER": os.getenv("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "password"),
+        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -149,7 +150,7 @@ USE_TZ = True
 
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

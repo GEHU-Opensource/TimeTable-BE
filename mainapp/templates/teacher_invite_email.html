@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Invitation - GEHU</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f7fa;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        padding-top: 20px;
+        text-align: center;
+      }
+
+      .logo {
+        max-width: 70px;
+        height: auto;
+      }
+
+      .content {
+        padding: 0px 30px 30px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        font-size: 24px;
+        margin-top: 0;
+      }
+
+      p {
+        margin-bottom: 16px;
+      }
+
+      .cta-button {
+        display: inline-block;
+        padding: 12px 20px;
+        margin: 20px 0;
+        background-color: #1a73e8;
+        color: white !important;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+
+      .footer {
+        background-color: rgba(234, 237, 244, 0.5);
+        padding: 20px;
+        text-align: center;
+        color: #000;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .footer p {
+        margin: 8px 0;
+      }
+
+      .footer a {
+        color: #000;
+        text-decoration: underline;
+      }
+
+      .footer strong {
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <img
+          src="https://i.imgur.com/kPLQZRs.png"
+          alt="GEHU Logo"
+          class="logo"
+        />
+      </div>
+
+      <div class="content">
+        <h1>You're Invited to Join GEHU</h1>
+
+        <p>
+          Hello {{ teacher_name }},
+          <br />
+          You have been invited to submit your teaching preferences for the
+          upcoming academic session.
+        </p>
+
+        <p>
+          Please click the button below to securely fill in your details and
+          subject preferences.
+        </p>
+
+        <p style="text-align: center">
+          <a href="{{ invite_link }}" class="cta-button">Submit Your Details</a>
+        </p>
+
+        <p>
+          This invitation link is valid for <strong>24 hours</strong>. If the
+          link expires, please contact us to request a new one.
+        </p>
+
+        <p>
+          If you did not expect this email or have any questions, reach out to
+          us at
+          <a href="mailto:timetablegehu@gmail.com">timetablegehu@gmail.com</a>.
+        </p>
+
+        <p>We look forward to working with you.</p>
+      </div>
+
+      <div class="footer">
+        <p><strong>Graphic Era Hill University, Bhimtal</strong></p>
+        <p>
+          <a href="mailto:timetablegehu@gmail.com">timetablegehu@gmail.com</a>
+        </p>
+        <p>&copy; {{ current_year }} GEHU. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>
