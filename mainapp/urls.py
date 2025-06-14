@@ -11,6 +11,7 @@ from .logics.subjects import get_all_subjects, get_filtered_subjects, add_subjec
 from .logics.teachers import get_specific_teacher, get_all_teachers, add_teacher, update_teacher, delete_teacher, update_password
 from .logics.hod import get_pending_requests, approve_subject_requests, get_approved_subjects
 from .logics.timetable import generate_timetable, detect_conflicts, manual_timetable_upload
+from . import views
 
 
 schema_view = get_schema_view(

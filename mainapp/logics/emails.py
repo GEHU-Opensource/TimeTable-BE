@@ -1,10 +1,12 @@
+import os
+
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 import threading
 import requests
 from django.conf import settings
-# from premailer import transform
+from premailer import transform
 
 SLACK_WEBHOOK_URL = settings.SLACK_WEBHOOK_URL
 
@@ -36,7 +38,7 @@ def send_email_async(subject, template_name, context, recipient_email):
             email = EmailMultiAlternatives(
                 subject,
                 text_content,
-                None,  # Uses default email sender from settings
+                settings.DEFAULT_FROM_EMAIL,
                 [recipient_email],
             )
             email.attach_alternative(html_content, "text/html")

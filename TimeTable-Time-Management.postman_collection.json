@@ -1,0 +1,366 @@
+{
+    "info": {
+        "name": "TimeTable Management API",
+        "description": "API collection for TimeTable Management System",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"your.email@example.com\",\n    \"password\": \"your_password\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/login/",
+                            "host": ["{{base_url}}"],
+                            "path": ["login", ""]
+                        },
+                        "description": "Login to get access token"
+                    }
+                },
+                {
+                    "name": "Refresh Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"refresh\": \"your_refresh_token\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/token/refresh/",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "token", "refresh", ""]
+                        },
+                        "description": "Get new access token using refresh token"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Time Management",
+            "item": [
+                {
+                    "name": "Get All Time Slots",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/time-slots/",
+                            "host": ["{{base_url}}"],
+                            "path": ["time-slots", ""]
+                        },
+                        "description": "Get all time slots"
+                    }
+                },
+                {
+                    "name": "Create Time Slot",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"start_time\": \"09:00\",\n    \"end_time\": \"10:00\",\n    \"slot_name\": \"First Period\",\n    \"is_break\": false,\n    \"order\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/time-slots/",
+                            "host": ["{{base_url}}"],
+                            "path": ["time-slots", ""]
+                        },
+                        "description": "Create a new time slot"
+                    }
+                },
+                {
+                    "name": "Get All Time Configurations",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/time-configurations/",
+                            "host": ["{{base_url}}"],
+                            "path": ["time-configurations", ""]
+                        },
+                        "description": "Get all time configurations"
+                    }
+                },
+                {
+                    "name": "Create Time Configuration",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Regular Schedule\",\n    \"is_active\": true,\n    \"slot_ids\": [1, 2, 3]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/time-configurations/",
+                            "host": ["{{base_url}}"],
+                            "path": ["time-configurations", ""]
+                        },
+                        "description": "Create a new time configuration"
+                    }
+                },
+                {
+                    "name": "Get Active Time Configuration",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/active-time-configuration/",
+                            "host": ["{{base_url}}"],
+                            "path": ["active-time-configuration", ""]
+                        },
+                        "description": "Get the currently active time configuration"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Teachers",
+            "item": [
+                {
+                    "name": "Get All Teachers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/getAllTeachers/",
+                            "host": ["{{base_url}}"],
+                            "path": ["getAllTeachers", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Teacher",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"1234567890\",\n    \"department\": \"Computer Science\",\n    \"designation\": \"Professor\",\n    \"working_days\": \"Monday-Friday\",\n    \"teacher_type\": \"faculty\",\n    \"preferred_subjects\": [\"Data Structures\", \"Algorithms\"]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/addTeacher/",
+                            "host": ["{{base_url}}"],
+                            "path": ["addTeacher", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Subjects",
+            "item": [
+                {
+                    "name": "Get All Subjects",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/getAllSubjects/",
+                            "host": ["{{base_url}}"],
+                            "path": ["getAllSubjects", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Subject",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"subject_name\": \"Data Structures\",\n    \"subject_code\": \"CS201\",\n    \"semester\": 3,\n    \"credits\": 4,\n    \"weekly_quota_limit\": 3,\n    \"department\": \"Computer Science\",\n    \"course\": \"B.Tech\",\n    \"branch\": \"CSE\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/addSubject/",
+                            "host": ["{{base_url}}"],
+                            "path": ["addSubject", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Rooms",
+            "item": [
+                {
+                    "name": "Get All Rooms",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/getRooms/",
+                            "host": ["{{base_url}}"],
+                            "path": ["getRooms", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Room",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"room_code\": \"LT-101\",\n    \"capacity\": 60,\n    \"room_type\": \"Lecture Theatre\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/addRoom/",
+                            "host": ["{{base_url}}"],
+                            "path": ["addRoom", ""]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Timetable",
+            "item": [
+                {
+                    "name": "Generate Timetable",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/timetable/generate/",
+                            "host": ["{{base_url}}"],
+                            "path": ["timetable", "generate", ""]
+                        }
+                    }
+                },
+                {
+                    "name": "Detect Conflicts",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "csv_files",
+                                    "type": "file",
+                                    "src": []
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/detectConflicts/",
+                            "host": ["{{base_url}}"],
+                            "path": ["detectConflicts", ""]
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000",
+            "type": "string"
+        }
+    ]
+} 
