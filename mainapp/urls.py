@@ -44,7 +44,8 @@ urlpatterns = [
 
 
     # Teacher APIs
-    path("getSpecificTeacher/", get_specific_teacher, name="get-Specific-Teacher"),
+    path("getSpecificTeacher/", get_specific_teacher, name="get-specific-teacher"),
+    path("getSpecificTeacher/<str:teacher_code>/", get_specific_teacher, name="get-specific-teacher"),
     path("getAllTeachers/", get_all_teachers, name="get-Teachers"),
     path("addTeacher/", add_teacher, name="add-Teacher"),
     path("updateTeacher/<int:pk>/", update_teacher, name="update-Teacher"),
