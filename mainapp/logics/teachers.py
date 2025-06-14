@@ -29,7 +29,11 @@ def invite_teachers(request):
     """
     Sends invitation emails to teachers with a link to fill out their details and preferred subjects.
     """
-    emails = request.data
+    emails = (
+        request.data
+        if isinstance(request.data, list)
+        else request.data.get("emails", [])
+    )
 
     if not isinstance(emails, list) or not emails:
         return Response(
