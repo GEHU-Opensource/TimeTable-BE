@@ -1,3 +1,5 @@
+import { showLoader, hideLoader, authFetch, BE_URL, departments } from './data.js';
+
 document.addEventListener("DOMContentLoaded", () => {
     function loadComponent(id, file) {
         showLoader();

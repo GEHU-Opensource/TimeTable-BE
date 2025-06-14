@@ -1,3 +1,5 @@
+import { showLoader, hideLoader, authFetch, BE_URL, departments } from './data.js';
+
 document.addEventListener("DOMContentLoaded", () => {
     function loadComponent(id, file) {
         showLoader();
@@ -44,8 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function init() {
-        loadComponent("navbar-admin", "/TimeTable-FE/components/admin_navbar.html");
-        loadComponent("footer", "/TimeTable-FE/components/footer.html");
+        loadComponent("navbar-admin", "/TimeTable-FE/assets/components/admin_navbar.html");
+        loadComponent("footer", "/TimeTable-FE/assets/components/footer.html");
         setTimeout(highlightActiveLink, 1000);
     }
     init();
