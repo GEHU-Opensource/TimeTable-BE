@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/styles/style.css" />
+    <link rel="stylesheet" href="assets/styles/root.css">
+</head>
+
+<body>
+    <div id="loader" style="display: none;">
+        <div class="loader-overlay">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <img src="assets/images/logo.png" alt="Logo" class="logo" />
+    </header>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <h2>TimeTable Login</h2>
+        <form id="login-form">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="e.g. XYZ.123@gehu.ac.in" required />
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required />
+                <div class="show">
+                    <input type="checkbox" id="show-password" onclick="togglePassword()"> Show Password
+                </div>
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <p id="error-message" class="error-message"></p>
+        </form>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="assets/scripts/data.js"></script>
+    <script src="assets/scripts/script.js"></script>
+</body>
+
+</html>

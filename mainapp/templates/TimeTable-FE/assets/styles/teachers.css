@@ -1,0 +1,228 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    max-width: 1000px;
+    margin: 30px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.search-container {
+    margin: 15px 0;
+    text-align: right;
+}
+
+#teacherSearch {
+    padding: 8px 15px;
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    outline: none;
+    background-color: #f9fff9;
+}
+
+#teacherSearch:focus {
+    outline: none;
+    background-color: #f9fff9;
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.8);
+}
+
+#noTeachersMessage {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #555;
+    display: none;
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 30px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+table th,
+table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+.action-section button {
+    font-size: 1em;
+    padding: 10px 20px;
+    margin: 0 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.edit-btn,
+.delete-btn {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+
+.edit-btn {
+    color: #0096c7;
+}
+
+.edit-btn:hover {
+    color: #0077b6;
+}
+
+.delete-btn {
+    color: #d62828;
+}
+
+.delete-btn:hover {
+    color: #9a031e;
+}
+
+button[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    background: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1;
+    margin-top: 5px;
+}
+
+.action-section button i {
+    margin-right: 5px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 25px;
+    border: 1px solid #888;
+    width: 60%;
+    max-width: 700px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+.teacher-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.detail-item {
+    margin-bottom: 15px;
+}
+
+.detail-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.detail-item span {
+    display: block;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    min-height: 18px;
+}
+
+.edit-type-form {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.edit-type-form select {
+    padding: 8px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.edit-type-form button {
+    padding: 8px 15px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#saveTypeBtn {
+    background-color: #0096c7;
+}
+
+#saveTypeBtn:hover {
+    background-color: #0077b6;
+}
+
+#cancelEditBtn {
+    background-color: #d62828;
+    margin-left: 10px;
+}
+
+#cancelEditBtn:hover {
+    background-color: #9a031e;
+}

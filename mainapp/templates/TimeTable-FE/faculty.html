@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Faculty Information Form</title>
+    <link rel="shortcut icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/styles/faculty.css" />
+    <link rel="stylesheet" href="assets/styles/root.css">
+</head>
+
+<body>
+    <div id="loader" style="display: none;">
+        <div class="loader-overlay">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div class="header">
+        <img src="assets/images/logo.png" alt="logo" class="logo" />
+    </div>
+
+    <div class="container">
+        <form id="facultyForm">
+            <h2>Faculty Information</h2>
+            <label for="name">Name *</label>
+            <input type="text" name="name" id="name" placeholder="e.g. JOHN DOE" autocapitalize="words" required />
+
+            <label for="phone">Contact Number *</label>
+            <input type="phone" name="number" id="phone" placeholder="e.g. 9782XXXXXX" required pattern="\d{10}" />
+
+            <label for="email">Official Email *</label>
+            <input type="email" name="email" id="email" placeholder="e.g. XYZ.123@gehu.ac.in" required
+                pattern=".+@gehu\.ac\.in" />
+
+            <label for="department">Department *</label>
+            <select name="department" id="department" required>
+                <option value="" selected>Select Department</option>
+            </select>
+
+            <label for="designation">Designation *</label>
+            <select id="designation" name="designation" required>
+                <option value="">Select Designation</option>
+                <option value="Professor">Professor</option>
+                <option value="Adjunct">Adjunct</option>
+                <option value="HOD">HOD</option>
+                <option value="Assistant Professor">Assistant Professor</option>
+                <option value="Lecturer">Lecturer</option>
+                <option value="Lab Assistant">Lab Assistant</option>
+            </select>
+
+            <label for="working_days">Working Days *</label>
+            <select id="working_days" name="working_days" required>
+                <option value="">Select Working Days</option>
+                <option value="Monday-Friday">Monday-Friday</option>
+                <option value="Tuesday-Saturday">Tuesday-Saturday</option>
+                <option value="Monday-Saturday">Monday-Saturday</option>
+            </select>
+
+            <label for="subjects">Preferred Subjects *</label>
+            <input type="text" id="searchSubjects" placeholder="Search and select subjects" autocomplete="off" />
+            <div class="dropdown-content"></div>
+
+            <div class="selected-subjects">
+                <label for="selected">Selected Subjects *</label>
+                <div id="subjectList"></div>
+            </div>
+
+            <button type="submit">Submit</button>
+            <!--Submit Button-->
+        </form>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" style="display: none">
+            <p>Submitting your details, please wait...</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="assets/scripts/data.js"></script>
+    <script src="assets/scripts/faculty.js"></script>
+</body>
+
+</html>

@@ -43,6 +43,7 @@ def send_email_async(subject, template_name, context, recipient_email):
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
+
         except Exception as e:
             error_message = f"Email sending failed for {recipient_email}. Error: {e}"
             print(error_message)  # Log the error

@@ -8,6 +8,20 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from mainapp.models import Teacher
 
 
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def index(request):
+    """
+        Check if the database is up and running.
+    """
+
+    try:
+        from django.shortcuts import render
+        return render(request, "TimeTable-FE/index.html")
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def login(request):

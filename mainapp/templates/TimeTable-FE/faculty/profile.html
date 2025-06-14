@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty | Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/styles/profile.css" />
+    <link rel="stylesheet" href="../assets/styles/root.css">
+
+    <script>
+        async function validateSession() {
+            const accessToken = localStorage.getItem("access_token");
+            const refreshToken = localStorage.getItem("refresh_token");
+            const expirationTime = localStorage.getItem("sessionExpiresAt");
+
+            if (!accessToken || !refreshToken || !expirationTime) {
+                alert("You are not authorized! Redirecting to login.");
+                removeSessionData();
+                window.location.href = "../index.html";
+                return false;
+            }
+
+            const currentTime = Date.now();
+
+            // If token expired, refresh it
+            if (currentTime >= expirationTime) {
+                const refreshed = await refreshAccessToken(refreshToken);
+                return refreshed;
+            }
+
+            startTimer(expirationTime);
+            return true;
+        }
+
+        async function refreshAccessToken(refreshToken) {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ refresh: refreshToken }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.access) {
+                    const newExpirationTime = Date.now() + 2 * 60 * 60 * 1000; // 2 hours
+                    localStorage.setItem("access_token", data.access);
+                    localStorage.setItem("sessionExpiresAt", newExpirationTime);
+                    alert("Session refreshed!");
+
+                    return validateSession();
+                } else {
+                    throw new Error(data.detail || "Session refresh failed");
+                }
+            } catch (error) {
+                console.error("Error refreshing access token:", error);
+                alert("Session expired! Redirecting to login.");
+                removeSessionData();
+                window.location.href = "../index.html";
+                return false;
+            }
+        }
+
+        let sessionTimer;
+        function startTimer(expirationTime) {
+            if (sessionTimer) clearInterval(sessionTimer); // Clear previous timer
+            sessionTimer = setInterval(() => {
+                const currentTime = Date.now();
+                if (currentTime >= expirationTime) {
+                    alert("Session Expired!");
+                    clearInterval(sessionTimer);
+                    removeSessionData();
+                    window.location.href = "../index.html";
+                }
+            }, 1000);
+        }
+
+        function removeSessionData() {
+            localStorage.clear();
+        }
+        validateSession();
+    </script>
+
+</head>
+
+<body>
+    <div id="loader" style="display: none;">
+        <div class="loader-overlay">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div id="navbar-faculty"></div>
+
+    <div class="container">
+        <div class="header-container">
+            <h2 id="profileHeading">Profile</h2>
+            <button id="editBtn"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+        </div>
+        <form id="profileForm">
+            <div class="form-columns">
+                <div class="personal-info">
+                    <h3><i class="fas fa-user"></i> Personal Information</h3>
+                    <label for="name">Name *</label>
+                    <input type="text" id="name" placeholder="e.g. JOHN DOE" disabled required>
+
+                    <label for="phone">Contact Number *</label>
+                    <input type="text" id="phone" placeholder="e.g. 9782XXXXXX" disabled required>
+
+                    <label for="email">Official Email *</label>
+                    <input type="email" id="email" placeholder="e.g. XYZ.123@gehu.ac.in" pattern=".+@gehu\.ac\.in"
+                        disabled required>
+                </div>
+
+                <div class="professional-info">
+                    <h3><i class="fas fa-briefcase"></i> Professional Information</h3>
+                    <label for="department">Department *</label>
+                    <select id="department" disabled required>
+                        <option value="">Select Department</option>
+                    </select>
+
+                    <label for="designation">Designation *</label>
+                    <select id="designation" disabled required>
+                        <option value="">Select Designation</option>
+                        <option value="Professor">Professor</option>
+                        <option value="Adjunct">Adjunct</option>
+                        <option value="HOD">HOD</option>
+                        <option value="Assistant Professor">Assistant Professor</option>
+                        <option value="Lecturer">Lecturer</option>
+                        <option value="Lab Assistant">Lab Assistant</option>
+                    </select>
+
+                    <label for="working_days">Working Days *</label>
+                    <select id="working_days" disabled required>
+                        <option value="">Select Working Days</option>
+                        <option value="Monday-Friday">Monday-Friday</option>
+                        <option value="Tuesday-Saturday">Tuesday-Saturday</option>
+                        <option value="Monday-Saturday">Monday-Saturday</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <button type="submit" id="submitBtn" disabled>Update</button>
+            </div>
+
+            <div class="subjects-container">
+                <h3><i class="fas fa-book"></i> Assigned Subjects</h3>
+                <div id="subjectList" class="subject-grid"></div>
+                <p class="inRequest">Note: Subject(s) are pending for approval!</p>
+            </div>
+        </form>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="../assets/scripts/data.js"></script>
+    <script src="../assets/scripts/profile.js"></script>
+</body>
+
+</html>

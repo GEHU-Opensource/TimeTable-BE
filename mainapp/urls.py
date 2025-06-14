@@ -4,7 +4,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
-from .logics.login import login
+from .logics.login import login, index
 from .logics.rooms import get_rooms, add_room, update_room, delete_room
 from .logics.students import addStudentAPI,listSections,downloadSections
 from .logics.subjects import get_all_subjects, get_filtered_subjects, add_subject, update_subject, delete_subject
@@ -30,7 +30,6 @@ schema_view = get_schema_view(
 urlpatterns = [
     # Authentication and Database Status
     path("login/", login, name="login"),
-
 
     # JWT Authentication
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
