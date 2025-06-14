@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Manual Update TimeTable</title>
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/TimeTable-FE/assets/styles/updateTT.css" />
+    <link rel="stylesheet" href="/TimeTable-FE/assets/styles/root.css">
+
+    <script>
+        async function validateSession() {
+            const accessToken = localStorage.getItem("access_token");
+            const refreshToken = localStorage.getItem("refresh_token");
+            const expirationTime = localStorage.getItem("sessionExpiresAt");
+
+            if (!accessToken || !refreshToken || !expirationTime) {
+                alert("You are not authorized! Redirecting to login.");
+                removeSessionData();
+                window.location.href = "../index.html";
+                return false;
+            }
+
+            const currentTime = Date.now();
+
+            // If token expired, refresh it
+            if (currentTime >= expirationTime) {
+                const refreshed = await refreshAccessToken(refreshToken);
+                return refreshed;
+            }
+
+            startTimer(expirationTime);
+            return true;
+        }
+
+        async function refreshAccessToken(refreshToken) {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ refresh: refreshToken }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.access) {
+                    const newExpirationTime = Date.now() + 2 * 60 * 60 * 1000; // 2 hours
+                    localStorage.setItem("access_token", data.access);
+                    localStorage.setItem("sessionExpiresAt", newExpirationTime);
+                    alert("Session refreshed!");
+
+                    return validateSession();
+                } else {
+                    throw new Error(data.detail || "Session refresh failed");
+                }
+            } catch (error) {
+                console.error("Error refreshing access token:", error);
+                alert("Session expired! Redirecting to login.");
+                removeSessionData();
+                window.location.href = "../index.html";
+                return false;
+            }
+        }
+
+        let sessionTimer;
+        function startTimer(expirationTime) {
+            if (sessionTimer) clearInterval(sessionTimer); // Clear previous timer
+            sessionTimer = setInterval(() => {
+                const currentTime = Date.now();
+                if (currentTime >= expirationTime) {
+                    alert("Session Expired!");
+                    clearInterval(sessionTimer);
+                    removeSessionData();
+                    window.location.href = "../index.html";
+                }
+            }, 1000);
+        }
+
+        function removeSessionData() {
+            localStorage.clear();
+        }
+        validateSession();
+    </script>
+
+</head>
+
+<body>
+    <div id="loader" style="display: none;">
+        <div class="loader-overlay">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div id="navbar-admin"></div>
+
+    <main>
+        <div class="form-container">
+            <h2>Update TimeTable</h2>
+            <form action="" id="subjectDetailsform">
+                <div class="form-group">
+                    <label for="department">Department *</label>
+                    <select name="department" id="department" required>
+                        <option value="" selected>Select Department</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="course">Course *</label>
+                    <select name="course" id="course" required>
+                        <option value="" selected>Select Course</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="branch">Branch *</label>
+                    <select name="branch" id="branch" required>
+                        <option value="" selected>Select Branch</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Year *</label>
+                    <select name="year" id="year" required>
+                        <option value="" selected>Select Year</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="semester">Semester *</label>
+                    <select name="semester" id="semester" required>
+                        <option value="" selected>Select Semester</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tt">Updated TimeTable *</label>
+                    <div class="file-input-container">
+                        <label for="tt" class="file-label">Choose File</label>
+                        <input type="file" name="tt" id="tt" accept=".csv" />
+                        <span id="file-chosen">No file chosen</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" id="updateTT">Update TT</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="/TimeTable-FE/assets/scripts/data.js"></script>
+    <script src="/TimeTable-FE/assets/scripts/updateTT.js"></script>
+</body>
+
+</html>

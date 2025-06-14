@@ -9,10 +9,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = "django-insecure-_z08bl^02re7fpkx-f4k%46=mcd$fczddsesh0(yk_!%x@vca3"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

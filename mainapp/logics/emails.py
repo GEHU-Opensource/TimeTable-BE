@@ -1,3 +1,5 @@
+import os
+
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
@@ -36,11 +38,12 @@ def send_email_async(subject, template_name, context, recipient_email):
             email = EmailMultiAlternatives(
                 subject,
                 text_content,
-                None,  # Uses default email sender from settings
+                settings.DEFAULT_FROM_EMAIL,
                 [recipient_email],
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
+
         except Exception as e:
             error_message = f"Email sending failed for {recipient_email}. Error: {e}"
             print(error_message)  # Log the error

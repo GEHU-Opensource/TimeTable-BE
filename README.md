@@ -12,7 +12,11 @@ Welcome to the **Timetable Scheduling Backend** repository! This project serves 
 
 
 ## 🛠️ Installation
-To run this backend project, follow these steps:
+To run this backend project, follow these steps (Clients):
+1. **Clone the Repository**: Clone this repository to your local machine.
+2. Run setupTT.py file.
+3. Run `python manage.py runserver` to start the server.
+4. Access the app at `{HOSTED_URL}`
 
 ### Prerequisites
 Ensure you have the following installed:
@@ -21,7 +25,7 @@ Ensure you have the following installed:
 - A virtual environment tool (e.g., `venv`)  
 - Database system (MongoDB and PostgreSQL)  
 
-### Steps
+### Steps to install (Developers):
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/yourusername/GEHU-TimeTable-BE.git

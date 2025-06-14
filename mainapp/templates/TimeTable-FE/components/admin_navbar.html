@@ -1,0 +1,102 @@
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+        height: 70px;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        padding: 0;
+        margin: 0;
+        margin-top: 15px;
+    }
+
+    nav ul li {
+        list-style: none;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        position: relative;
+        padding-bottom: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li a.active::after {
+        content: "";
+        display: block;
+        width: 70%;
+        height: 2.5px;
+        background-color: #007bff;
+        border-radius: 3px;
+        margin-top: 0.3rem;
+        animation: underlineGrow 0.3s ease-out;
+    }
+
+    @keyframes underlineGrow {
+        from {
+            width: 0;
+        }
+
+        to {
+            width: 70%;
+        }
+    }
+
+    nav ul li a:hover {
+        color: #666;
+    }
+
+    .logout-btn {
+        background-color: #d62828;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .logout-btn:hover {
+        background-color: #9a031e;
+    }
+</style>
+
+<header>
+    <img src="/TimeTable-FE/assets/images/logo.png" alt="logo" />
+    <nav>
+        <ul>
+            <li><a href="/TimeTable-FE/admin/subject.html">Subjects</a></li>
+            <li><a href="/TimeTable-FE/admin/class.html">Classes</a></li>
+            <li><a href="/TimeTable-FE/admin/teachers.html">Teachers</a></li>
+            <li><a href="/TimeTable-FE/admin/generateTT.html">Generate TT</a></li>
+            <!-- <li><a href="/TimeTable-FE/admin/updateTT.html">Update TT</a></li> -->
+            <!-- <li><a href="/TimeTable-FE/admin/viewTT.html">View TT</a></li> -->
+            <li><a href="/TimeTable-FE/admin/detectConflicts.html">Detect Conflicts</a></li>
+            <!-- <li><a href="/TimeTable-FE/admin/sectionAllocate.html">Section Allocation</a></li> -->
+
+        </ul>
+    </nav>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+</header>

@@ -1,0 +1,91 @@
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+        height: 70px;
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        padding: 0;
+        margin: 0;
+        margin-top: 15px;
+    }
+
+    nav ul li {
+        list-style: none;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        position: relative;
+        padding-bottom: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li a.active::after {
+        content: "";
+        display: block;
+        width: 70%;
+        height: 2.5px;
+        background-color: #007bff;
+        border-radius: 3px;
+        margin-top: 0.3rem;
+        animation: underlineGrow 0.3s ease-out;
+    }
+
+    @keyframes underlineGrow {
+        from {
+            width: 0;
+        }
+
+        to {
+            width: 70%;
+        }
+    }
+
+    nav ul li a:hover {
+        color: #666;
+    }
+
+    .logout-btn {
+        background-color: #d62828;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .logout-btn:hover {
+        background-color: #9a031e;
+    }
+</style>
+
+<header>
+    <img src="../assets/images/logo.png" alt="logo" />
+    <nav>
+        <ul>
+            <li><a href="/hod/timetable.html">TimeTable</a></li>
+            <li><a href="/hod/subjectReview.html">Review Request</a></li>
+            <!-- <li><a href="/hod/teacherSection.html">Teacher Section</a></li> -->
+            <li><a href="/hod/profile.html">Profile</a></li>
+            <li><a href="/hod/settings.html">Settings</a></li>
+        </ul>
+    </nav>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+</header>

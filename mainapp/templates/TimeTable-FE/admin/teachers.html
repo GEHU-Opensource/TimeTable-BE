@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Teacher Management</title>
+    <link rel="shortcut icon" href="/TimeTable-FE/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/TimeTable-FE/assets/styles/teachers.css" />
+    <link rel="stylesheet" href="/TimeTable-FE/assets/styles/root.css">
+
+    <script>
+        async function validateSession() {
+            const accessToken = localStorage.getItem("access_token");
+            const refreshToken = localStorage.getItem("refresh_token");
+            const expirationTime = localStorage.getItem("sessionExpiresAt");
+
+            if (!accessToken || !refreshToken || !expirationTime) {
+                alert("You are not authorized! Redirecting to login.");
+                removeSessionData();
+                window.location.href = "../index.html";
+                return false;
+            }
+
+            const currentTime = Date.now();
+
+            // If token expired, refresh it
+            if (currentTime >= expirationTime) {
+                const refreshed = await refreshAccessToken(refreshToken);
+                return refreshed;
+            }
+
+            startTimer(expirationTime);
+            return true;
+        }
+
+        async function refreshAccessToken(refreshToken) {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ refresh: refreshToken }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.access) {
+                    const newExpirationTime = Date.now() + 2 * 60 * 60 * 1000; // 2 hours
+                    localStorage.setItem("access_token", data.access);
+                    localStorage.setItem("sessionExpiresAt", newExpirationTime);
+                    alert("Session refreshed!");
+
+                    return validateSession();
+                } else {
+                    throw new Error(data.detail || "Session refresh failed");
+                }
+            } catch (error) {
+                console.error("Error refreshing access token:", error);
+                alert("Session expired! Redirecting to login.");
+                removeSessionData();
+                window.location.href = "../index.html";
+                return false;
+            }
+        }
+
+        let sessionTimer;
+        function startTimer(expirationTime) {
+            if (sessionTimer) clearInterval(sessionTimer); // Clear previous timer
+            sessionTimer = setInterval(() => {
+                const currentTime = Date.now();
+                if (currentTime >= expirationTime) {
+                    alert("Session Expired!");
+                    clearInterval(sessionTimer);
+                    removeSessionData();
+                    window.location.href = "../index.html";
+                }
+            }, 1000);
+        }
+
+        function removeSessionData() {
+            localStorage.clear();
+        }
+    </script>
+
+</head>
+
+<body>
+    <div id="loader" style="display: none;">
+        <div class="loader-overlay">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div id="navbar-admin"></div>
+
+    <main>
+        <h2>Teacher Management</h2>
+        <div class="search-container">
+            <input type="text" id="teacherSearch" placeholder="Search teachers...">
+        </div>
+        <div id="noTeachersMessage">No teachers found.</div>
+        <table id="teachersTable">
+            <thead>
+                <tr>
+                    <th>SRN</th>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="teachersTableBody">
+                <!-- Teachers will be loaded from API -->
+            </tbody>
+        </table>
+    </main>
+
+    <!-- Teacher Details Modal -->
+    <div id="teacherDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="teacherNameTitle">Teacher Details</h2>
+            <div class="teacher-details" id="teacherDetailsContent">
+                <!-- Details will be filled Dynamically -->
+            </div>
+            <div class="edit-type-form" id="editTypeForm">
+                <h3>Edit Teacher Type</h3>
+                <select id="teacherTypeSelect">
+                    <option value="faculty">Faculty</option>
+                    <option value="hod">HOD</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button id="saveTypeBtn"><i class="fas fa-save"></i> Save</button>
+                <button id="cancelEditBtn"><i class="fas fa-times"></i> Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="/TimeTable-FE/assets/scripts/data.js"></script>
+    <script src="/TimeTable-FE/assets/scripts/teachers.js"></script>
+</body>
+
+</html>
